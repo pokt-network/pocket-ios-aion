@@ -1,0 +1,582 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		C54081C221C1451D00748D4E /* PocketAion.swift in Sources */ = {isa = PBXBuildFile; fileRef = C54081C121C1451D00748D4E /* PocketAion.swift */; };
+		C54081C721C159A700748D4E /* aion.bundle in Resources */ = {isa = PBXBuildFile; fileRef = C54081C621C159A700748D4E /* aion.bundle */; };
+		C59A116321BAEC1B002CCB4C /* pocket_aion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C59A115921BAEC1B002CCB4C /* pocket_aion.framework */; };
+		C59A116821BAEC1B002CCB4C /* pocket_aionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59A116721BAEC1B002CCB4C /* pocket_aionTests.swift */; };
+		C59A116A21BAEC1B002CCB4C /* pocket_aion.h in Headers */ = {isa = PBXBuildFile; fileRef = C59A115C21BAEC1B002CCB4C /* pocket_aion.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D561DEEABA50E42B3E2E10FB /* Pods_pocket_aion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E67E78FC4D38FE3FB39B1959 /* Pods_pocket_aion.framework */; };
+		D88A71246B7A847FD9479B01 /* Pods_pocket_aionTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D243322E4CD4830E580F60CE /* Pods_pocket_aionTests.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		C59A116421BAEC1B002CCB4C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C59A115021BAEC1B002CCB4C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C59A115821BAEC1B002CCB4C;
+			remoteInfo = "pocket-aion";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		5DEDB19334E5CD030A284209 /* Pods-pocket-aion.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-pocket-aion.release.xcconfig"; path = "Pods/Target Support Files/Pods-pocket-aion/Pods-pocket-aion.release.xcconfig"; sourceTree = "<group>"; };
+		612EF048E3C971D9A477D426 /* Pods-pocket-aionTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-pocket-aionTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-pocket-aionTests/Pods-pocket-aionTests.debug.xcconfig"; sourceTree = "<group>"; };
+		A8FE5381A986F0880E4D80D4 /* Pods-pocket-aion.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-pocket-aion.debug.xcconfig"; path = "Pods/Target Support Files/Pods-pocket-aion/Pods-pocket-aion.debug.xcconfig"; sourceTree = "<group>"; };
+		C54081C121C1451D00748D4E /* PocketAion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketAion.swift; sourceTree = "<group>"; };
+		C54081C621C159A700748D4E /* aion.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = aion.bundle; path = "pocket-aion/aion.bundle"; sourceTree = SOURCE_ROOT; };
+		C59A115921BAEC1B002CCB4C /* pocket_aion.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = pocket_aion.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C59A115C21BAEC1B002CCB4C /* pocket_aion.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = pocket_aion.h; sourceTree = "<group>"; };
+		C59A115D21BAEC1B002CCB4C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C59A116221BAEC1B002CCB4C /* pocket-aionTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "pocket-aionTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C59A116721BAEC1B002CCB4C /* pocket_aionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = pocket_aionTests.swift; sourceTree = "<group>"; };
+		C59A116921BAEC1B002CCB4C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D243322E4CD4830E580F60CE /* Pods_pocket_aionTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_pocket_aionTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E67E78FC4D38FE3FB39B1959 /* Pods_pocket_aion.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_pocket_aion.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E8A855FB575607A376C9F781 /* Pods-pocket-aionTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-pocket-aionTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-pocket-aionTests/Pods-pocket-aionTests.release.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C59A115621BAEC1B002CCB4C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D561DEEABA50E42B3E2E10FB /* Pods_pocket_aion.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C59A115F21BAEC1B002CCB4C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C59A116321BAEC1B002CCB4C /* pocket_aion.framework in Frameworks */,
+				D88A71246B7A847FD9479B01 /* Pods_pocket_aionTests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		33EEB964CDB526289B190D33 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				A8FE5381A986F0880E4D80D4 /* Pods-pocket-aion.debug.xcconfig */,
+				5DEDB19334E5CD030A284209 /* Pods-pocket-aion.release.xcconfig */,
+				612EF048E3C971D9A477D426 /* Pods-pocket-aionTests.debug.xcconfig */,
+				E8A855FB575607A376C9F781 /* Pods-pocket-aionTests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		C2C6D91D875335BFEA7046FF /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E67E78FC4D38FE3FB39B1959 /* Pods_pocket_aion.framework */,
+				D243322E4CD4830E580F60CE /* Pods_pocket_aionTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C5807BA221C82E0000E1EB1C /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		C59A114F21BAEC1B002CCB4C = {
+			isa = PBXGroup;
+			children = (
+				C59A115B21BAEC1B002CCB4C /* pocket-aion */,
+				C59A116621BAEC1B002CCB4C /* pocket-aionTests */,
+				C59A115A21BAEC1B002CCB4C /* Products */,
+				33EEB964CDB526289B190D33 /* Pods */,
+				C2C6D91D875335BFEA7046FF /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		C59A115A21BAEC1B002CCB4C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C59A115921BAEC1B002CCB4C /* pocket_aion.framework */,
+				C59A116221BAEC1B002CCB4C /* pocket-aionTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C59A115B21BAEC1B002CCB4C /* pocket-aion */ = {
+			isa = PBXGroup;
+			children = (
+				C5807BA221C82E0000E1EB1C /* Models */,
+				C54081C121C1451D00748D4E /* PocketAion.swift */,
+				C59A115C21BAEC1B002CCB4C /* pocket_aion.h */,
+				C59A115D21BAEC1B002CCB4C /* Info.plist */,
+				C54081C621C159A700748D4E /* aion.bundle */,
+			);
+			path = "pocket-aion";
+			sourceTree = "<group>";
+		};
+		C59A116621BAEC1B002CCB4C /* pocket-aionTests */ = {
+			isa = PBXGroup;
+			children = (
+				C59A116721BAEC1B002CCB4C /* pocket_aionTests.swift */,
+				C59A116921BAEC1B002CCB4C /* Info.plist */,
+			);
+			path = "pocket-aionTests";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		C59A115421BAEC1B002CCB4C /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C59A116A21BAEC1B002CCB4C /* pocket_aion.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		C59A115821BAEC1B002CCB4C /* pocket-aion */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C59A116D21BAEC1B002CCB4C /* Build configuration list for PBXNativeTarget "pocket-aion" */;
+			buildPhases = (
+				487565FF7E6597AA55286AEF /* [CP] Check Pods Manifest.lock */,
+				C59A115421BAEC1B002CCB4C /* Headers */,
+				C59A115521BAEC1B002CCB4C /* Sources */,
+				C59A115621BAEC1B002CCB4C /* Frameworks */,
+				C59A115721BAEC1B002CCB4C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "pocket-aion";
+			productName = "pocket-aion";
+			productReference = C59A115921BAEC1B002CCB4C /* pocket_aion.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		C59A116121BAEC1B002CCB4C /* pocket-aionTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C59A117021BAEC1B002CCB4C /* Build configuration list for PBXNativeTarget "pocket-aionTests" */;
+			buildPhases = (
+				94EBD8D1936D070547626877 /* [CP] Check Pods Manifest.lock */,
+				C59A115E21BAEC1B002CCB4C /* Sources */,
+				C59A115F21BAEC1B002CCB4C /* Frameworks */,
+				C59A116021BAEC1B002CCB4C /* Resources */,
+				6E9F3621A3C52195282FE35A /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C59A116521BAEC1B002CCB4C /* PBXTargetDependency */,
+			);
+			name = "pocket-aionTests";
+			productName = "pocket-aionTests";
+			productReference = C59A116221BAEC1B002CCB4C /* pocket-aionTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C59A115021BAEC1B002CCB4C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1010;
+				LastUpgradeCheck = 1010;
+				ORGANIZATIONNAME = "Pocket Network";
+				TargetAttributes = {
+					C59A115821BAEC1B002CCB4C = {
+						CreatedOnToolsVersion = 10.1;
+						LastSwiftMigration = 1010;
+					};
+					C59A116121BAEC1B002CCB4C = {
+						CreatedOnToolsVersion = 10.1;
+					};
+				};
+			};
+			buildConfigurationList = C59A115321BAEC1B002CCB4C /* Build configuration list for PBXProject "pocket-aion" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = C59A114F21BAEC1B002CCB4C;
+			productRefGroup = C59A115A21BAEC1B002CCB4C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C59A115821BAEC1B002CCB4C /* pocket-aion */,
+				C59A116121BAEC1B002CCB4C /* pocket-aionTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		C59A115721BAEC1B002CCB4C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C54081C721C159A700748D4E /* aion.bundle in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C59A116021BAEC1B002CCB4C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		487565FF7E6597AA55286AEF /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-pocket-aion-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6E9F3621A3C52195282FE35A /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-pocket-aionTests/Pods-pocket-aionTests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Pocket/Pocket.framework",
+				"${BUILT_PRODUCTS_DIR}/PocketSwiftKeychainWrapper/SwiftKeychainWrapper.framework",
+				"${BUILT_PRODUCTS_DIR}/RNCryptor/RNCryptor.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Pocket.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftKeychainWrapper.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RNCryptor.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-pocket-aionTests/Pods-pocket-aionTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		94EBD8D1936D070547626877 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-pocket-aionTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C59A115521BAEC1B002CCB4C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C54081C221C1451D00748D4E /* PocketAion.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C59A115E21BAEC1B002CCB4C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C59A116821BAEC1B002CCB4C /* pocket_aionTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C59A116521BAEC1B002CCB4C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C59A115821BAEC1B002CCB4C /* pocket-aion */;
+			targetProxy = C59A116421BAEC1B002CCB4C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		C59A116B21BAEC1B002CCB4C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		C59A116C21BAEC1B002CCB4C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		C59A116E21BAEC1B002CCB4C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A8FE5381A986F0880E4D80D4 /* Pods-pocket-aion.debug.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 89229Z2MHH;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "pocket-aion/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "network.pokt.pocket-aion";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		C59A116F21BAEC1B002CCB4C /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5DEDB19334E5CD030A284209 /* Pods-pocket-aion.release.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 89229Z2MHH;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "pocket-aion/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "network.pokt.pocket-aion";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		C59A117121BAEC1B002CCB4C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 612EF048E3C971D9A477D426 /* Pods-pocket-aionTests.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 89229Z2MHH;
+				INFOPLIST_FILE = "pocket-aionTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "network.pokt.pocket-aionTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		C59A117221BAEC1B002CCB4C /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E8A855FB575607A376C9F781 /* Pods-pocket-aionTests.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 89229Z2MHH;
+				INFOPLIST_FILE = "pocket-aionTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "network.pokt.pocket-aionTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C59A115321BAEC1B002CCB4C /* Build configuration list for PBXProject "pocket-aion" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C59A116B21BAEC1B002CCB4C /* Debug */,
+				C59A116C21BAEC1B002CCB4C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C59A116D21BAEC1B002CCB4C /* Build configuration list for PBXNativeTarget "pocket-aion" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C59A116E21BAEC1B002CCB4C /* Debug */,
+				C59A116F21BAEC1B002CCB4C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C59A117021BAEC1B002CCB4C /* Build configuration list for PBXNativeTarget "pocket-aionTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C59A117121BAEC1B002CCB4C /* Debug */,
+				C59A117221BAEC1B002CCB4C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C59A115021BAEC1B002CCB4C /* Project object */;
+}
