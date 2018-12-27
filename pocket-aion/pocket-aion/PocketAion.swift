@@ -16,16 +16,21 @@ public class PocketAion: Pocket, PocketPlugin {
     public static var network = "AION"
     public static let initialized = false
     
-    public static func initJS() {
+    public static func initJS() throws {
         
         if initialized == true {
             return
         }
         
+        // Exception handler
+        jsContext?.exceptionHandler = { context, error in
+            try? throwErrorWith(message: error?.toString() ?? "none")
+        }
+        
         // Retrieve and evaluate all javascript dependencies
-        let cryptoPolyfillJS = getJSFileForResource(name: "crypto-polyfill")
-        let promiseJs = getJSFileForResource(name: "promiseDeps")
-        let distJS = getJSFileForResource(name: "Web3Aion")
+        let cryptoPolyfillJS = try getJSFileForResource(name: "crypto-polyfill")
+        let promiseJs = try getJSFileForResource(name: "promiseDeps")
+        let distJS = try getJSFileForResource(name: "Web3Aion")
         
         // Create window object
         jsContext?.evaluateScript("var window = this;")
@@ -46,7 +51,7 @@ public class PocketAion: Pocket, PocketPlugin {
     
     public static func createWallet(subnetwork: String, data: [AnyHashable : Any]?) throws -> Wallet {
         // TODO: Find a better way to do this
-        initJS()
+        try initJS()
         
         // Create account
         guard let account = jsContext?.evaluateScript("aionInstance.eth.accounts.create()")?.toObject() as? [AnyHashable: Any] else {
@@ -65,12 +70,7 @@ public class PocketAion: Pocket, PocketPlugin {
     
     public static func importWallet(privateKey: String, subnetwork: String, address: String?, data: [AnyHashable : Any]?) throws -> Wallet {
         // TODO: Find a better way to do this
-        initJS()
-        
-        // Exception handler
-        jsContext?.exceptionHandler = { context, error in
-            print("JsContext failed with error: \(error?.toString() ?? "none")")
-        }
+        try initJS()
         
         guard let publicKey = address else {
             throw PocketPluginError.walletCreationError("Invalid public key")
@@ -86,7 +86,7 @@ public class PocketAion: Pocket, PocketPlugin {
         }
         
         if account["address"] as? String != publicKey {
-            throw PocketPluginError.transactionCreationError("Failed to create account object")
+            throw PocketPluginError.transactionCreationError("Invalid address provided.")
         }
         
         return try Wallet(address: publicKey, privateKey: privateKey, network: network, subnetwork: subnetwork, data: nil)
@@ -94,15 +94,10 @@ public class PocketAion: Pocket, PocketPlugin {
     
     public static func createTransaction(wallet: Wallet, params: [AnyHashable : Any]) throws -> Transaction {
         // TODO: Find a better way to do this
-        initJS()
+        try initJS()
         
         // Pocket Transaction
         let pocketTx = Transaction(obj: ["network": wallet.network, "subnetwork": wallet.subnetwork])
-        
-        // JS Account
-        guard let _ = jsContext?.evaluateScript("var account = aionInstance.eth.accounts.privateKeyToAccount('\(wallet.privateKey)')") else {
-            throw PocketPluginError.transactionCreationError("Failed to create account object")
-        }
         
         // Transaction params
         guard let nonce =  params["nonce"] as? String else {
@@ -127,22 +122,17 @@ public class PocketAion: Pocket, PocketPlugin {
             throw PocketPluginError.transactionCreationError("Failed to retrieve gas value")
         }
         
-        // Exception handler
-        jsContext?.exceptionHandler = { context, error in
-            print("JsContext failed with error: \(error?.toString() ?? "none")")
-        }
-        
         // Promise Handler
         let promiseBlock: @convention(block) (JavaScriptCore.JSValue, JavaScriptCore.JSValue) -> () = { (error, result) in
             // Check for errors
             if !error.isNull {
-                print("Failed to sign transaction with error: \(error)")
+                try? throwErrorWith(message: "Failed to sign transaction with error: \(error)")
             }else{
                 // Retrieve result object and raw transaction
                 let resultObject = result.toObject() as! [AnyHashable: Any]
                 
                 guard let rawTx = resultObject["rawTransaction"] as? String else {
-                    print("Failed to retrieve raw signed transaction")
+                    try? throwErrorWith(message: "Failed to retrieve raw signed transaction")
                     return
                 }
                 // Assign pocket transaction value for property serializedTransaction
@@ -159,7 +149,9 @@ public class PocketAion: Pocket, PocketPlugin {
         window.setObject(promiseBlock, forKeyedSubscript: "transactionCreationCallback" as NSString)
         
         // Retrieve SignTransaction JS File
-        let signTxJSStr = getJSFileForResource(name: "SignTransaction")
+        guard let signTxJSStr = try? getJSFileForResource(name: "SignTransaction") else {
+            throw PocketPluginError.transactionCreationError("Failed to retrieve sign-transaction js file")
+        }
         
         // Check if is empty and evaluate script with the transaction parameters using string format %@
         if !signTxJSStr.isEmpty {
@@ -177,7 +169,7 @@ public class PocketAion: Pocket, PocketPlugin {
     
     public static func createQuery(subnetwork: String, params: [AnyHashable : Any], decoder: [AnyHashable : Any]?) throws -> Query {
         // TODO: Find a better way to do this
-        initJS()
+        try initJS()
         
         let pocketQuery = Query(network: network, subnetwork: subnetwork, data: nil, decoder: nil)
         
@@ -201,39 +193,32 @@ public class PocketAion: Pocket, PocketPlugin {
         }
         pocketQuery.decoder = try JSON.valueToJsonPrimitive(anyValue: decoderParams)
         
-        // Assign network
-        pocketQuery.network = network
-        pocketQuery.subnetwork = subnetwork
-        
         return pocketQuery
     }
     
     // MARK: Tools
-    public static func removeJSGlobalObjects() {
+    private static func removeJSGlobalObjects() {
         jsContext?.evaluateScript("window.transactionCreationCallback = ''")
         jsContext?.evaluateScript("account = ''")
     }
     
-    public static func getJSFileForResource(name: String) -> String {
+    private static func throwErrorWith(message: String) throws {
+        throw PocketPluginError.transactionCreationError("Unknown error happened: \(message)")
+    }
+    
+    public static func getJSFileForResource(name: String) throws -> String {
         guard let aionBundleURL = Bundle.init(for: PocketAion.self).url(forResource: "aion", withExtension: "bundle") else {
-            return ""
+            throw PocketPluginError.transactionCreationError("Failed to retrieve aion bundle URL")
         }
         
         guard let aionBundle = Bundle.init(url: aionBundleURL) else {
-            return ""
+            throw PocketPluginError.transactionCreationError("Failed to retrieve aion bundle.")
         }
         
-        do {
-            let jsFilePath = aionBundle.path(forResource: name, ofType: "js")
-            
-            let jsFileString = try String(contentsOfFile: jsFilePath!, encoding: String.Encoding.utf8)
-            
-            return jsFileString
-        } catch {
-            print(error);
-        }
+        let jsFilePath = aionBundle.path(forResource: name, ofType: "js")
+        let jsFileString = try String(contentsOfFile: jsFilePath!, encoding: String.Encoding.utf8)
         
-        return ""
+        return jsFileString
     }
     
 }
