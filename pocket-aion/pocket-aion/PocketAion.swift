@@ -14,8 +14,14 @@ public class PocketAion: Pocket, PocketPlugin {
     
     public static var jsContext = JSContext()
     public static var network = "AION"
+    public static let initialized = false
     
-    public class func initJS() {
+    public static func initJS() {
+        
+        if initialized == true {
+            return
+        }
+        
         // Retrieve and evaluate all javascript dependencies
         let cryptoPolyfillJS = getJSFileForResource(name: "crypto-polyfill")
         let promiseJs = getJSFileForResource(name: "promiseDeps")
@@ -39,6 +45,9 @@ public class PocketAion: Pocket, PocketPlugin {
     }
     
     public static func createWallet(subnetwork: String, data: [AnyHashable : Any]?) throws -> Wallet {
+        // TODO: Find a better way to do this
+        initJS()
+        
         // Create account
         guard let account = jsContext?.evaluateScript("aionInstance.eth.accounts.create()")?.toObject() as? [AnyHashable: Any] else {
             throw PocketPluginError.walletCreationError("Failed to create account")
@@ -55,6 +64,9 @@ public class PocketAion: Pocket, PocketPlugin {
     }
     
     public static func importWallet(privateKey: String, subnetwork: String, address: String?, data: [AnyHashable : Any]?) throws -> Wallet {
+        // TODO: Find a better way to do this
+        initJS()
+        
         // Exception handler
         jsContext?.exceptionHandler = { context, error in
             print("JsContext failed with error: \(error?.toString() ?? "none")")
@@ -81,6 +93,9 @@ public class PocketAion: Pocket, PocketPlugin {
     }
     
     public static func createTransaction(wallet: Wallet, params: [AnyHashable : Any]) throws -> Transaction {
+        // TODO: Find a better way to do this
+        initJS()
+        
         // Pocket Transaction
         let pocketTx = Transaction(obj: ["network": wallet.network, "subnetwork": wallet.subnetwork])
         
@@ -161,6 +176,9 @@ public class PocketAion: Pocket, PocketPlugin {
     }
     
     public static func createQuery(subnetwork: String, params: [AnyHashable : Any], decoder: [AnyHashable : Any]?) throws -> Query {
+        // TODO: Find a better way to do this
+        initJS()
+        
         let pocketQuery = Query(network: network, subnetwork: subnetwork, data: nil, decoder: nil)
         
         // Create data param

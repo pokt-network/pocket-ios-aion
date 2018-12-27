@@ -19,81 +19,102 @@ class pocket_aionTests: XCTestCase {
 
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
-        PocketAion.jsContext = JSContext()
-    }
-
-    func testCreateAndImportAccount() {
-
-        // Initialize PocketAion JS
-        PocketAion.initJS()
-        var account: Wallet?
-        
-        if let _ = PocketAion.jsContext {
-            // Create account
-            do {
-                account = try PocketAion.createWallet(subnetwork: "mastery", data: nil)
-            } catch {
-                print(error)
-            }
-            
-            if account == nil {
-                print("Account for import is nil")
-                return
-            }
-            
-            do {
-                let importedWallet = try PocketAion.importWallet(privateKey: account!.privateKey, subnetwork: "mastery", address: account!.address, data: nil)
-                print("Imported account = \(importedWallet)")
-            } catch {
-                print(error)
-            }
-            
-        }else {
-            print("Failed to retrieve JS Context")
-        }
-        
     }
     
-    func testSignTransaction() {
-        // Initialize PocketAion JS
-        PocketAion.initJS()
-        var unSignedTx = [AnyHashable: Any]()
+    func testWalletValidity(wallet: Wallet) {
+        XCTAssertNotNil(wallet)
+        XCTAssertNotNil(wallet.address)
+        XCTAssertNotNil(wallet.privateKey)
+        XCTAssertNotNil(wallet.network)
+        XCTAssertNotNil(wallet.subnetwork)
+    }
+    
+    // Test for CreateWallet
+    func testCreateWallet() {
+        let wallet = try? PocketAion.createWallet(subnetwork: "mastery", data: nil)
+        // Check wallet validity
+        testWalletValidity(wallet: wallet!)
+    }
+    
+    // Tests for importWallet()
+    func testImportWallet() {
+        let walletToImport = try? PocketAion.createWallet(subnetwork: "mastery", data: nil)
+        let importedWallet = try? PocketAion.importWallet(privateKey: walletToImport?.privateKey ?? "", subnetwork: walletToImport?.subnetwork ?? "mastery", address: walletToImport?.address, data: walletToImport?.data)
+        // Check wallet validity
+        testWalletValidity(wallet: importedWallet!)
         
-        do {
-            let receiverAccount = try PocketAion.createWallet(subnetwork: "mastery", data: nil)
-            
-            unSignedTx["nonce"] = "1"
-            unSignedTx["chainId"] = "010101"
-            unSignedTx["to"] = receiverAccount.address
-            unSignedTx["data"] = ""
-            unSignedTx["value"] = "0x989680"
-            unSignedTx["gasPrice"] = "0x989680"
-            unSignedTx["gas"] = "0x989680"
-            
-            if let _ = PocketAion.jsContext {
-                // Create account
-                do {
-                    let account = try PocketAion.createWallet(subnetwork: "mastery", data: nil)
-                    // Transaction
-                    let signedTx = try PocketAion.createTransaction(wallet: account, params: unSignedTx)
-                    print(signedTx)
-                } catch {
-                    print(error)
-                }
-            }else {
-                print("No Js Context")
-            }
-            
-        } catch {
-            print("Failed to create receiver wallet")
-        }
+        // Compare walletToImport with the importeWallet
+        XCTAssertEqual(walletToImport?.privateKey, importedWallet?.privateKey)
+        XCTAssertEqual(walletToImport?.address, importedWallet?.address)
+        XCTAssertEqual(walletToImport?.network, importedWallet?.network)
+        XCTAssertEqual(walletToImport?.subnetwork, importedWallet?.subnetwork)
+    }
+    
+    // Tests for createTransaction()
+    func testCreateTransactionSuccess() {
+        // Create account for the receiver of the transaction
+        let receiverAccount = try? PocketAion.createWallet(subnetwork: "mastery", data: nil)
         
+        // Transaction params
+        let txParams = ["nonce": "1", "to": receiverAccount?.address ?? "", "data": "", "value": "0x989680", "gasPrice": "0x989680", "gas": "0x989680"]
+        
+        // Create account
+        let account = try? PocketAion.createWallet(subnetwork: "mastery", data: nil)
+        // Transaction
+        let signedTx = try? PocketAion.createTransaction(wallet: account!, params: txParams)
+        
+        // Verify signed transaction data
+        XCTAssertNotNil(signedTx)
+        XCTAssertNotNil(signedTx?.serializedTransaction)
+        XCTAssertEqual("AION", signedTx?.network)
+        XCTAssertEqual("mastery", signedTx?.subnetwork)
+    }
+    
+    func testCreateTransactionTOError() {
+        let wallet = try? PocketAion.createWallet(subnetwork: "mastery", data: nil)
+        
+        var params = [AnyHashable : Any]()
+        params["to"] = nil
+        
+        XCTAssertThrowsError(try PocketAion.createTransaction(wallet: wallet!, params: params))
+    }
+    
+    // Tests for createQuery()
+    func testCreateQuerySuccess() {
+        let query = try? PocketAion.createQuery(subnetwork: "mastery", params: ["rpcMethod": "eth_getTransactionCount", "rpcParams": ["0x0", "latest"]], decoder: nil)
+        XCTAssertNotNil(query)
+        XCTAssertNotNil(query?.data)
+        XCTAssertEqual(query?.network, "AION")
+        XCTAssertEqual(query?.subnetwork, "mastery")
+        XCTAssertNotNil(query?.decoder)
+    }
+    
+    func testCreateQueryRPCError() {
+        XCTAssertThrowsError(try PocketAion.createQuery(subnetwork: "mastery", params: ["failedKey": "failedValue"], decoder: nil))
     }
 
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
+    // MARK: Performance tests
+    func testCreateWalletPerformance() {
         self.measure {
-            // Put the code you want to measure the time of here.
+            testCreateWallet()
+        }
+    }
+    
+    func testImportWalletPerformance() {
+        self.measure {
+            testImportWallet()
+        }
+    }
+    
+    func testCreateTransactionSuccessPerformance() {
+        self.measure {
+            testCreateTransactionSuccess()
+        }
+    }
+    
+    func testCreateQuerySuccessPerformance() {
+        self.measure {
+            testCreateQuerySuccess()
         }
     }
 
