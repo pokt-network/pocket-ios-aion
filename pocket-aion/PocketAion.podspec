@@ -1,10 +1,10 @@
+# PocketAion
 #
-#  Be sure to run `pod spec lint PocketAion.podspec' to ensure this is a
-#  valid spec and to remove all comments including this before submitting the spec.
+# Verifying:
+# pod lib lint PocketAion.podspec --allow-warnings
 #
-#  To learn more about Podspec attributes see http://docs.cocoapods.org/specification.html
-#  To see working Podspecs in the CocoaPods repo see https://github.com/CocoaPods/Specs/
-#
+# Releasing:
+# pod repo push master PocketAion.podspec --allow-warnings
 
 Pod::Spec.new do |s|
 
@@ -17,7 +17,7 @@ Pod::Spec.new do |s|
   s.summary      = "An Aion Plugin for the Pocket iOS SDK."
 
   # Settings
-  s.source       = { :git => "http://EXAMPLE/PocketAion.git", :tag => "#{s.version}" }
+  s.source            = { :git => 'https://github.com/pokt-network/pocket-ios-aion.git', :tag => s.version.to_s }
   s.source_files      = 'pocket-aion/**/*.{swift}'
   s.exclude_files     = 'docs/*', 'pocket-aionTests/**/*.{swift}'
   s.swift_version     = '4.0'
