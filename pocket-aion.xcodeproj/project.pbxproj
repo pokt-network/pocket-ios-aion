@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		C54081C221C1451D00748D4E /* PocketAion.swift in Sources */ = {isa = PBXBuildFile; fileRef = C54081C121C1451D00748D4E /* PocketAion.swift */; };
 		C54081C721C159A700748D4E /* aion.bundle in Resources */ = {isa = PBXBuildFile; fileRef = C54081C621C159A700748D4E /* aion.bundle */; };
+		C54E485C21DF9D5500837632 /* EthRPC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C54E485B21DF9D5500837632 /* EthRPC.swift */; };
+		C54E485E21DF9D6100837632 /* NetRPC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C54E485D21DF9D6100837632 /* NetRPC.swift */; };
+		C54E486021E3A37200837632 /* BlockTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = C54E485F21E3A37200837632 /* BlockTag.swift */; };
 		C59A116321BAEC1B002CCB4C /* pocket_aion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C59A115921BAEC1B002CCB4C /* pocket_aion.framework */; };
 		C59A116821BAEC1B002CCB4C /* pocket_aionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59A116721BAEC1B002CCB4C /* pocket_aionTests.swift */; };
 		C59A116A21BAEC1B002CCB4C /* pocket_aion.h in Headers */ = {isa = PBXBuildFile; fileRef = C59A115C21BAEC1B002CCB4C /* pocket_aion.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -32,6 +35,9 @@
 		A8FE5381A986F0880E4D80D4 /* Pods-pocket-aion.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-pocket-aion.debug.xcconfig"; path = "Pods/Target Support Files/Pods-pocket-aion/Pods-pocket-aion.debug.xcconfig"; sourceTree = "<group>"; };
 		C54081C121C1451D00748D4E /* PocketAion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketAion.swift; sourceTree = "<group>"; };
 		C54081C621C159A700748D4E /* aion.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = aion.bundle; path = "pocket-aion/aion.bundle"; sourceTree = SOURCE_ROOT; };
+		C54E485B21DF9D5500837632 /* EthRPC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EthRPC.swift; sourceTree = "<group>"; };
+		C54E485D21DF9D6100837632 /* NetRPC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetRPC.swift; sourceTree = "<group>"; };
+		C54E485F21E3A37200837632 /* BlockTag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockTag.swift; sourceTree = "<group>"; };
 		C59A115921BAEC1B002CCB4C /* pocket_aion.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = pocket_aion.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C59A115C21BAEC1B002CCB4C /* pocket_aion.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = pocket_aion.h; sourceTree = "<group>"; };
 		C59A115D21BAEC1B002CCB4C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -84,13 +90,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		C5807BA221C82E0000E1EB1C /* Models */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
 		C59A114F21BAEC1B002CCB4C = {
 			isa = PBXGroup;
 			children = (
@@ -114,11 +113,13 @@
 		C59A115B21BAEC1B002CCB4C /* pocket-aion */ = {
 			isa = PBXGroup;
 			children = (
-				C5807BA221C82E0000E1EB1C /* Models */,
 				C54081C121C1451D00748D4E /* PocketAion.swift */,
 				C59A115C21BAEC1B002CCB4C /* pocket_aion.h */,
 				C59A115D21BAEC1B002CCB4C /* Info.plist */,
 				C54081C621C159A700748D4E /* aion.bundle */,
+				C54E485B21DF9D5500837632 /* EthRPC.swift */,
+				C54E485D21DF9D6100837632 /* NetRPC.swift */,
+				C54E485F21E3A37200837632 /* BlockTag.swift */,
 			);
 			path = "pocket-aion";
 			sourceTree = "<group>";
@@ -173,7 +174,7 @@
 				C59A115E21BAEC1B002CCB4C /* Sources */,
 				C59A115F21BAEC1B002CCB4C /* Frameworks */,
 				C59A116021BAEC1B002CCB4C /* Resources */,
-				6E9F3621A3C52195282FE35A /* [CP] Embed Pods Frameworks */,
+				1FC7BE1FFCEFC932819AC28F /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -241,6 +242,32 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		1FC7BE1FFCEFC932819AC28F /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-pocket-aionTests/Pods-pocket-aionTests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/BigInt/BigInt.framework",
+				"${BUILT_PRODUCTS_DIR}/Pocket/Pocket.framework",
+				"${BUILT_PRODUCTS_DIR}/PocketSwiftKeychainWrapper/SwiftKeychainWrapper.framework",
+				"${BUILT_PRODUCTS_DIR}/RNCryptor/RNCryptor.framework",
+				"${BUILT_PRODUCTS_DIR}/SipHash/SipHash.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BigInt.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Pocket.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftKeychainWrapper.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RNCryptor.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SipHash.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-pocket-aionTests/Pods-pocket-aionTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		487565FF7E6597AA55286AEF /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -257,28 +284,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		6E9F3621A3C52195282FE35A /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-pocket-aionTests/Pods-pocket-aionTests-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Pocket/Pocket.framework",
-				"${BUILT_PRODUCTS_DIR}/PocketSwiftKeychainWrapper/SwiftKeychainWrapper.framework",
-				"${BUILT_PRODUCTS_DIR}/RNCryptor/RNCryptor.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Pocket.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftKeychainWrapper.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RNCryptor.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-pocket-aionTests/Pods-pocket-aionTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		94EBD8D1936D070547626877 /* [CP] Check Pods Manifest.lock */ = {
@@ -306,7 +311,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C54E486021E3A37200837632 /* BlockTag.swift in Sources */,
 				C54081C221C1451D00748D4E /* PocketAion.swift in Sources */,
+				C54E485E21DF9D6100837632 /* NetRPC.swift in Sources */,
+				C54E485C21DF9D5500837632 /* EthRPC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

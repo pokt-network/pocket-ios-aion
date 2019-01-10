@@ -9,6 +9,12 @@
 import Foundation
 import Pocket
 import JavaScriptCore
+import BigInt
+
+public typealias PocketAionStringHandler = ([String]?, Error?) -> Void
+public typealias PocketAionBigIntHandler = (BigInt?, Error?) -> Void
+public typealias PocketAionJSONHandler = ([JSON]?, Error?) -> Void
+public typealias PocketAionBooleanHandler = (Bool?, Error?) -> Void
 
 public class PocketAion: Pocket, PocketPlugin {
     
@@ -65,7 +71,7 @@ public class PocketAion: Pocket, PocketPlugin {
             throw PocketPluginError.walletCreationError("Invalid address")
         }
         
-        return try Wallet(address: address, privateKey: privateKey, network: network, subnetwork: subnetwork, data: nil)
+        return Wallet(address: address, privateKey: privateKey, network: network, subnetwork: subnetwork, data: nil)
     }
     
     public static func importWallet(privateKey: String, subnetwork: String, address: String?, data: [AnyHashable : Any]?) throws -> Wallet {
@@ -89,7 +95,7 @@ public class PocketAion: Pocket, PocketPlugin {
             throw PocketPluginError.transactionCreationError("Invalid address provided.")
         }
         
-        return try Wallet(address: publicKey, privateKey: privateKey, network: network, subnetwork: subnetwork, data: nil)
+        return Wallet(address: publicKey, privateKey: privateKey, network: network, subnetwork: subnetwork, data: nil)
     }
     
     public static func createTransaction(wallet: Wallet, params: [AnyHashable : Any]) throws -> Transaction {
@@ -221,4 +227,12 @@ public class PocketAion: Pocket, PocketPlugin {
         return jsFileString
     }
     
+}
+
+extension PocketPluginError {
+    public enum Aion: Error {
+        case javaScriptExecutionError(String)
+        case bundledFileError(String)
+        case executionError(String)
+    }
 }
