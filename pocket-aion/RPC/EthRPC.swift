@@ -288,6 +288,35 @@ extension PocketAion {
                 return
             }
         }
+        // eth_sendTransaction, returns a hash string
+        public static func sendTransaction(wallet: Wallet, nonce: BigInt, to: String, data: String, value: BigInt, gasPrice: BigInt, gas: BigInt, handler: @escaping PocketAionStringHandler) throws {
+            
+            var txParams = [AnyHashable: Any]()
+            txParams["nonce"] = nonce
+            txParams["to"] = to
+            txParams["data"] = data
+            txParams["value"] = value
+            txParams["gasPrice"] = gasPrice
+            txParams["gas"] = gas
+            
+            let transaction = try createTransaction(wallet: wallet, params: txParams)
+            
+            PocketAion.shared.sendTransaction(transaction: transaction) { (txResponse, error) in
+                if error != nil {
+                    handler(nil, error)
+                }else if txResponse != nil{
+                    if txResponse?.hash != nil {
+                        handler([(txResponse?.hash)!], nil)
+                    }else {
+                        handler(nil,PocketPluginError.Aion.executionError("Transaction response hash is nil, unknown error"))
+                    }
+                }else {
+                    handler(nil,PocketPluginError.Aion.executionError("Send Transaction failed with unknown error"))
+                }
+            }
+            
+        }
+        
         // eth_getBlockByHash, returns an array of JSON objects with the information of a block by hash.
         public static func getBlockByHash(blockHash: String, fullTx: Bool, subnetwork: String, handler: @escaping PocketAionJSONHandler) throws {
             

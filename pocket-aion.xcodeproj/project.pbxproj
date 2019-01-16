@@ -12,6 +12,10 @@
 		C54E485C21DF9D5500837632 /* EthRPC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C54E485B21DF9D5500837632 /* EthRPC.swift */; };
 		C54E485E21DF9D6100837632 /* NetRPC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C54E485D21DF9D6100837632 /* NetRPC.swift */; };
 		C54E486021E3A37200837632 /* BlockTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = C54E485F21E3A37200837632 /* BlockTag.swift */; };
+		C54E486421E92C0200837632 /* AionContract.swift in Sources */ = {isa = PBXBuildFile; fileRef = C54E486321E92C0200837632 /* AionContract.swift */; };
+		C54E486621ED207500837632 /* Function.swift in Sources */ = {isa = PBXBuildFile; fileRef = C54E486521ED207500837632 /* Function.swift */; };
+		C54E486821EE319000837632 /* InputOutput.swift in Sources */ = {isa = PBXBuildFile; fileRef = C54E486721EE319000837632 /* InputOutput.swift */; };
+		C56B27E921EF8EB5006A22ED /* HexStringUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = C56B27E821EF8EB5006A22ED /* HexStringUtil.swift */; };
 		C59A116321BAEC1B002CCB4C /* pocket_aion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C59A115921BAEC1B002CCB4C /* pocket_aion.framework */; };
 		C59A116821BAEC1B002CCB4C /* pocket_aionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59A116721BAEC1B002CCB4C /* pocket_aionTests.swift */; };
 		C59A116A21BAEC1B002CCB4C /* pocket_aion.h in Headers */ = {isa = PBXBuildFile; fileRef = C59A115C21BAEC1B002CCB4C /* pocket_aion.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -38,6 +42,10 @@
 		C54E485B21DF9D5500837632 /* EthRPC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EthRPC.swift; sourceTree = "<group>"; };
 		C54E485D21DF9D6100837632 /* NetRPC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetRPC.swift; sourceTree = "<group>"; };
 		C54E485F21E3A37200837632 /* BlockTag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockTag.swift; sourceTree = "<group>"; };
+		C54E486321E92C0200837632 /* AionContract.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AionContract.swift; sourceTree = "<group>"; };
+		C54E486521ED207500837632 /* Function.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Function.swift; sourceTree = "<group>"; };
+		C54E486721EE319000837632 /* InputOutput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputOutput.swift; sourceTree = "<group>"; };
+		C56B27E821EF8EB5006A22ED /* HexStringUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HexStringUtil.swift; sourceTree = "<group>"; };
 		C59A115921BAEC1B002CCB4C /* pocket_aion.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = pocket_aion.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C59A115C21BAEC1B002CCB4C /* pocket_aion.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = pocket_aion.h; sourceTree = "<group>"; };
 		C59A115D21BAEC1B002CCB4C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -90,6 +98,33 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		C56B27E721EF8EA8006A22ED /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				C56B27E821EF8EB5006A22ED /* HexStringUtil.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		C56B27EB21EFDB99006A22ED /* Types */ = {
+			isa = PBXGroup;
+			children = (
+				C54E485F21E3A37200837632 /* BlockTag.swift */,
+				C54E486721EE319000837632 /* InputOutput.swift */,
+				C54E486521ED207500837632 /* Function.swift */,
+			);
+			path = Types;
+			sourceTree = "<group>";
+		};
+		C56B27EC21EFDBBD006A22ED /* RPC */ = {
+			isa = PBXGroup;
+			children = (
+				C54E485B21DF9D5500837632 /* EthRPC.swift */,
+				C54E485D21DF9D6100837632 /* NetRPC.swift */,
+			);
+			path = RPC;
+			sourceTree = "<group>";
+		};
 		C59A114F21BAEC1B002CCB4C = {
 			isa = PBXGroup;
 			children = (
@@ -113,13 +148,14 @@
 		C59A115B21BAEC1B002CCB4C /* pocket-aion */ = {
 			isa = PBXGroup;
 			children = (
+				C56B27EC21EFDBBD006A22ED /* RPC */,
+				C56B27EB21EFDB99006A22ED /* Types */,
+				C56B27E721EF8EA8006A22ED /* Utils */,
 				C54081C121C1451D00748D4E /* PocketAion.swift */,
 				C59A115C21BAEC1B002CCB4C /* pocket_aion.h */,
 				C59A115D21BAEC1B002CCB4C /* Info.plist */,
 				C54081C621C159A700748D4E /* aion.bundle */,
-				C54E485B21DF9D5500837632 /* EthRPC.swift */,
-				C54E485D21DF9D6100837632 /* NetRPC.swift */,
-				C54E485F21E3A37200837632 /* BlockTag.swift */,
+				C54E486321E92C0200837632 /* AionContract.swift */,
 			);
 			path = "pocket-aion";
 			sourceTree = "<group>";
@@ -254,6 +290,7 @@
 				"${BUILT_PRODUCTS_DIR}/PocketSwiftKeychainWrapper/SwiftKeychainWrapper.framework",
 				"${BUILT_PRODUCTS_DIR}/RNCryptor/RNCryptor.framework",
 				"${BUILT_PRODUCTS_DIR}/SipHash/SipHash.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
@@ -262,6 +299,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftKeychainWrapper.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RNCryptor.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SipHash.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -311,8 +349,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C56B27E921EF8EB5006A22ED /* HexStringUtil.swift in Sources */,
 				C54E486021E3A37200837632 /* BlockTag.swift in Sources */,
+				C54E486421E92C0200837632 /* AionContract.swift in Sources */,
 				C54081C221C1451D00748D4E /* PocketAion.swift in Sources */,
+				C54E486621ED207500837632 /* Function.swift in Sources */,
+				C54E486821EE319000837632 /* InputOutput.swift in Sources */,
 				C54E485E21DF9D6100837632 /* NetRPC.swift in Sources */,
 				C54E485C21DF9D5500837632 /* EthRPC.swift in Sources */,
 			);

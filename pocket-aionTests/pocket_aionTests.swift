@@ -14,7 +14,8 @@ import JavaScriptCore
 class pocket_aionTests: XCTestCase, Configuration {
     public var nodeURL: URL {
         get {
-            return URL(string: "https://aion.pokt.network")!
+            return URL(string: "http://pocket-aion-prod.us-east-1.elasticbeanstalk.com/")!
+//            return URL(string: "https://aion.pokt.network")!
         }
     }
     

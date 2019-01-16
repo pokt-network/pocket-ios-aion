@@ -15,6 +15,7 @@ public typealias PocketAionStringHandler = ([String]?, Error?) -> Void
 public typealias PocketAionBigIntHandler = (BigInt?, Error?) -> Void
 public typealias PocketAionJSONHandler = ([JSON]?, Error?) -> Void
 public typealias PocketAionBooleanHandler = (Bool?, Error?) -> Void
+public typealias PocketAionAnyHandler = ([Any]?, Error?) -> Void
 
 public class PocketAion: Pocket, PocketPlugin {
     
@@ -36,7 +37,7 @@ public class PocketAion: Pocket, PocketPlugin {
         // Retrieve and evaluate all javascript dependencies
         let cryptoPolyfillJS = try getJSFileForResource(name: "crypto-polyfill")
         let promiseJs = try getJSFileForResource(name: "promiseDeps")
-        let distJS = try getJSFileForResource(name: "Web3Aion")
+        let distJS = try getJSFileForResource(name: "web3Aion")
         
         // Create window object
         jsContext?.evaluateScript("var window = this;")
@@ -155,7 +156,7 @@ public class PocketAion: Pocket, PocketPlugin {
         window.setObject(promiseBlock, forKeyedSubscript: "transactionCreationCallback" as NSString)
         
         // Retrieve SignTransaction JS File
-        guard let signTxJSStr = try? getJSFileForResource(name: "SignTransaction") else {
+        guard let signTxJSStr = try? getJSFileForResource(name: "signTransaction") else {
             throw PocketPluginError.transactionCreationError("Failed to retrieve sign-transaction js file")
         }
         
@@ -171,6 +172,33 @@ public class PocketAion: Pocket, PocketPlugin {
         removeJSGlobalObjects()
         
         return pocketTx
+    }
+    
+    public static func encodeFunction(functionStr: String, params: String) throws -> String{
+        // TODO: Find a better way to do this
+        try initJS()
+        
+        // Generate code to run
+        guard let jsFile = try? getJSFileForResource(name: "encodeFunction") else{
+            throw PocketPluginError.Aion.bundledFileError("Failed to retrieve encodeFunction.js file")
+        }
+        
+        // Check if is empty and evaluate script with the transaction parameters using string format %@
+        if !jsFile.isEmpty {
+            let jsCode = String(format: jsFile, functionStr, params)
+            // Evaluate js code
+            jsContext?.evaluateScript(jsCode)
+        }else {
+            throw PocketPluginError.Aion.executionError("Failed to retrieve signed tx js string")
+        }
+        
+        // Retrieve
+        guard let functionCallData = jsContext?.objectForKeyedSubscript("functionCallData") else {
+            throw PocketPluginError.Aion.executionError("Failed to retrieve window js object")
+        }
+        
+        // return function call result
+        return functionCallData.toString()
     }
     
     public static func createQuery(subnetwork: String, params: [AnyHashable : Any], decoder: [AnyHashable : Any]?) throws -> Query {
