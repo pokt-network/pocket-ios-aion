@@ -174,34 +174,6 @@ public class PocketAion: Pocket, PocketPlugin {
         return pocketTx
     }
     
-    // TODO MAKE PRIVATE BI WAW WA WA
-    public static func encodeFunction(functionStr: String, params: String) throws -> String{
-        // TODO: Find a better way to do this
-        try initJS()
-        
-        // Generate code to run
-        guard let jsFile = try? getFileForResource(name: "encodeFunction", ext: "js") else{
-            throw PocketPluginError.Aion.bundledFileError("Failed to retrieve encodeFunction.js file")
-        }
-        
-        // Check if is empty and evaluate script with the transaction parameters using string format %@
-        if !jsFile.isEmpty {
-            let jsCode = String(format: jsFile, functionStr, params)
-            // Evaluate js code
-            jsContext?.evaluateScript(jsCode)
-        }else {
-            throw PocketPluginError.Aion.executionError("Failed to retrieve signed tx js string")
-        }
-        
-        // Retrieve
-        guard let functionCallData = jsContext?.objectForKeyedSubscript("functionCallData") else {
-            throw PocketPluginError.Aion.executionError("Failed to retrieve window js object")
-        }
-        
-        // return function call result
-        return functionCallData.toString()
-    }
-    
     public static func createQuery(subnetwork: String, params: [AnyHashable : Any], decoder: [AnyHashable : Any]?) throws -> Query {
         // TODO: Find a better way to do this
         try initJS()
@@ -260,7 +232,6 @@ public class PocketAion: Pocket, PocketPlugin {
 
 extension PocketPluginError {
     public enum Aion: Error {
-        case javaScriptExecutionError(String)
         case bundledFileError(String)
         case executionError(String)
     }

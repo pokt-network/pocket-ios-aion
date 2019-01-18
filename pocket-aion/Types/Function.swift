@@ -112,4 +112,32 @@ public struct Function {
         return encodedFunction
     }
     
+    public func getStringByKeyFromJSONArray(key: String, jsonArray: [JSON]) -> String?{
+        for item in jsonArray {
+            guard let jsonObj = item.dictionary else{
+                return nil
+            }
+            guard let result = jsonObj[key]?.string else{
+                return nil
+            }
+            
+            return result
+        }
+        return nil
+    }
+    
+    public func getArrayByKeyFromJSONArray(key: String, jsonArray: [JSON]) -> [JSON]?{
+        for item in jsonArray {
+            guard let jsonObj = item.dictionary else{
+                return nil
+            }
+            guard let array = jsonObj[key]?.array else{
+                return nil
+            }
+            
+            return array
+        }
+        return nil
+    }
+    
 }
