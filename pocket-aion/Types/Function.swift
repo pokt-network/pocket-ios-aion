@@ -16,7 +16,6 @@ public struct Function {
     private var name: String
     private var outputs: [InputOutput]
     private var payable: Bool
-    private var stateMutability: String
     private var functionJSON: [AnyHashable: Any]
     
     // Constants
@@ -25,17 +24,15 @@ public struct Function {
     private static let NAME_KEY = "name";
     private static let OUTPUTS_KEY = "outputs";
     private static let PAYABLE_KEY = "payable";
-    private static let STATE_MUTABILITY_KEY = "stateMutability";
     private static let TYPE_KEY = "type";
     private static let FUNCTION_TYPE_VALUE = "function";
     
-    init(constant: Bool, inputs: [InputOutput], name: String, outputs: [InputOutput], payable: Bool, stateMutability: String, functionJSON: [AnyHashable: Any]) {
+    init(constant: Bool, inputs: [InputOutput], name: String, outputs: [InputOutput], payable: Bool, functionJSON: [AnyHashable: Any]) {
         self.constant = constant
         self.inputs = inputs
         self.name = name
         self.outputs = outputs
         self.payable = payable
-        self.stateMutability = stateMutability
         self.functionJSON = functionJSON
     }
     
@@ -49,31 +46,21 @@ public struct Function {
             return nil
         }
         
-        guard let constant = jsonObject[CONSTANT_KEY] as? String else{
+        guard let constant = jsonObject[CONSTANT_KEY] as? Bool else{
+            return nil
+        }
+    
+        let inputsJSON = JSON.init(jsonObject[INPUTS_KEY] ?? [String: Any]())
+        let inputs = try InputOutput.fromInputJSONArray(inputArrayJSON: inputsJSON)
+        
+        guard let name = jsonObject[NAME_KEY] as? String else {
             return nil
         }
         
-        guard let inputsArray = jsonObject[INPUTS_KEY] as? [JSON] else {
-            return nil
-        }
+        let outputsJSON = JSON.init(jsonObject[OUTPUTS_KEY] ?? [String: Any]())
+        let outputs = try InputOutput.fromInputJSONArray(inputArrayJSON: outputsJSON)
         
-        let inputs = try InputOutput.fromInputJSONArray(inputArrayJSON: inputsArray)
-        
-        guard let name = jsonObject[INPUTS_KEY] as? String else {
-            return nil
-        }
-        
-        guard let outputsArray = jsonObject[OUTPUTS_KEY] as? [JSON] else {
-            return nil
-        }
-        
-        let outputs = try InputOutput.fromInputJSONArray(inputArrayJSON: outputsArray)
-        
-        guard let payable = jsonObject[PAYABLE_KEY] as? String else {
-            return nil
-        }
-        
-        guard let stateMutability = jsonObject[STATE_MUTABILITY_KEY] as? String else {
+        guard let payable = jsonObject[PAYABLE_KEY] as? Bool else {
             return nil
         }
         
@@ -81,7 +68,7 @@ public struct Function {
             return nil
         }
         
-        return Function.init(constant: Bool.init(constant) ?? false, inputs: inputs, name: name, outputs: outputs, payable: Bool.init(payable) ?? false, stateMutability: stateMutability, functionJSON: functionObj)
+        return Function.init(constant: constant, inputs: inputs, name: name, outputs: outputs, payable: payable, functionJSON: functionObj)
     }
     
     public func isConstant() ->Bool {
@@ -104,10 +91,6 @@ public struct Function {
         return payable;
     }
     
-    public func getStateMutability() -> String {
-        return stateMutability;
-    }
-    
     public func getFunctionJSON() -> [AnyHashable: Any]{
         return self.functionJSON;
     }
@@ -122,7 +105,7 @@ public struct Function {
         return jsonString
     }
     
-    public func getEncodedFunctionCall(params: [String]) throws ->String{
+    public func getEncodedFunctionCall(params: [Any]) throws ->String{
 
         let encodedFunction = try AionContract.encodeFunctionCall(function: self, params: params)
         

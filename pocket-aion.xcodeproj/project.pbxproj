@@ -19,6 +19,7 @@
 		C59A116321BAEC1B002CCB4C /* pocket_aion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C59A115921BAEC1B002CCB4C /* pocket_aion.framework */; };
 		C59A116821BAEC1B002CCB4C /* pocket_aionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59A116721BAEC1B002CCB4C /* pocket_aionTests.swift */; };
 		C59A116A21BAEC1B002CCB4C /* pocket_aion.h in Headers */ = {isa = PBXBuildFile; fileRef = C59A115C21BAEC1B002CCB4C /* pocket_aion.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C5A8A82521F20B8A009BF9B0 /* RpcParamsUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5A8A82421F20B8A009BF9B0 /* RpcParamsUtil.swift */; };
 		D561DEEABA50E42B3E2E10FB /* Pods_pocket_aion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E67E78FC4D38FE3FB39B1959 /* Pods_pocket_aion.framework */; };
 		D88A71246B7A847FD9479B01 /* Pods_pocket_aionTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D243322E4CD4830E580F60CE /* Pods_pocket_aionTests.framework */; };
 /* End PBXBuildFile section */
@@ -52,6 +53,7 @@
 		C59A116221BAEC1B002CCB4C /* pocket-aionTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "pocket-aionTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C59A116721BAEC1B002CCB4C /* pocket_aionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = pocket_aionTests.swift; sourceTree = "<group>"; };
 		C59A116921BAEC1B002CCB4C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C5A8A82421F20B8A009BF9B0 /* RpcParamsUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RpcParamsUtil.swift; sourceTree = "<group>"; };
 		D243322E4CD4830E580F60CE /* Pods_pocket_aionTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_pocket_aionTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E67E78FC4D38FE3FB39B1959 /* Pods_pocket_aion.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_pocket_aion.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8A855FB575607A376C9F781 /* Pods-pocket-aionTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-pocket-aionTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-pocket-aionTests/Pods-pocket-aionTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -102,6 +104,7 @@
 			isa = PBXGroup;
 			children = (
 				C56B27E821EF8EB5006A22ED /* HexStringUtil.swift */,
+				C5A8A82421F20B8A009BF9B0 /* RpcParamsUtil.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -350,6 +353,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C56B27E921EF8EB5006A22ED /* HexStringUtil.swift in Sources */,
+				C5A8A82521F20B8A009BF9B0 /* RpcParamsUtil.swift in Sources */,
 				C54E486021E3A37200837632 /* BlockTag.swift in Sources */,
 				C54E486421E92C0200837632 /* AionContract.swift in Sources */,
 				C54081C221C1451D00748D4E /* PocketAion.swift in Sources */,

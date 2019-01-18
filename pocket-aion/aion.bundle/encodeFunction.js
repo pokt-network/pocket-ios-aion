@@ -1,4 +1,4 @@
-var jsonInterface = %s;
-var params = [%s];
+var jsonInterface = %@;
+var params = [%@];
 
 var functionCallData = aionInstance.eth.abi.encodeFunctionCall(jsonInterface, params);

@@ -35,9 +35,9 @@ public class PocketAion: Pocket, PocketPlugin {
         }
         
         // Retrieve and evaluate all javascript dependencies
-        let cryptoPolyfillJS = try getJSFileForResource(name: "crypto-polyfill")
-        let promiseJs = try getJSFileForResource(name: "promiseDeps")
-        let distJS = try getJSFileForResource(name: "web3Aion")
+        let cryptoPolyfillJS = try getFileForResource(name: "crypto-polyfill", ext: "js")
+        let promiseJs = try getFileForResource(name: "promiseDeps", ext: "js")
+        let distJS = try getFileForResource(name: "web3Aion", ext: "js")
         
         // Create window object
         jsContext?.evaluateScript("var window = this;")
@@ -156,7 +156,7 @@ public class PocketAion: Pocket, PocketPlugin {
         window.setObject(promiseBlock, forKeyedSubscript: "transactionCreationCallback" as NSString)
         
         // Retrieve SignTransaction JS File
-        guard let signTxJSStr = try? getJSFileForResource(name: "signTransaction") else {
+        guard let signTxJSStr = try? getFileForResource(name: "signTransaction", ext: "js") else {
             throw PocketPluginError.transactionCreationError("Failed to retrieve sign-transaction js file")
         }
         
@@ -174,12 +174,13 @@ public class PocketAion: Pocket, PocketPlugin {
         return pocketTx
     }
     
+    // TODO MAKE PRIVATE BI WAW WA WA
     public static func encodeFunction(functionStr: String, params: String) throws -> String{
         // TODO: Find a better way to do this
         try initJS()
         
         // Generate code to run
-        guard let jsFile = try? getJSFileForResource(name: "encodeFunction") else{
+        guard let jsFile = try? getFileForResource(name: "encodeFunction", ext: "js") else{
             throw PocketPluginError.Aion.bundledFileError("Failed to retrieve encodeFunction.js file")
         }
         
@@ -240,7 +241,7 @@ public class PocketAion: Pocket, PocketPlugin {
         throw PocketPluginError.transactionCreationError("Unknown error happened: \(message)")
     }
     
-    public static func getJSFileForResource(name: String) throws -> String {
+    public static func getFileForResource(name: String, ext: String) throws -> String {
         guard let aionBundleURL = Bundle.init(for: PocketAion.self).url(forResource: "aion", withExtension: "bundle") else {
             throw PocketPluginError.transactionCreationError("Failed to retrieve aion bundle URL")
         }
@@ -249,10 +250,10 @@ public class PocketAion: Pocket, PocketPlugin {
             throw PocketPluginError.transactionCreationError("Failed to retrieve aion bundle.")
         }
         
-        let jsFilePath = aionBundle.path(forResource: name, ofType: "js")
-        let jsFileString = try String(contentsOfFile: jsFilePath!, encoding: String.Encoding.utf8)
+        let filePath = aionBundle.path(forResource: name, ofType: ext)
+        let fileString = try String(contentsOfFile: filePath!, encoding: String.Encoding.utf8)
         
-        return jsFileString
+        return fileString
     }
     
 }

@@ -45,7 +45,7 @@ extension PocketAion {
         // Generic function to execute RPC methods and returns a BigInt
         private static func genericIntegerRPCMethod(subnetwork: String, params: [String], method: ethRPCMethodType, handler: @escaping PocketAionBigIntHandler) throws {
             
-            let query = try PocketAion.createQuery(subnetwork: subnetwork, params: ["rpcMethod": method.rawValue, "rpcParams": params], decoder: nil)
+            let query = try PocketAion.createQuery(subnetwork: subnetwork, params: ["rpcMethod": method.rawValue, "rpcParams": params] as [String : Any], decoder: nil)
             
             PocketAion.shared.executeQuery(query: query) { (queryResponse, error) in
                 if error != nil {
@@ -53,15 +53,26 @@ extension PocketAion {
                     return
                 }
                 
-                guard let txHash = queryResponse?.result?.value() as? [JSON] else {
-                    let error = PocketPluginError.queryCreationError("Failed to retrieve query response result value")
-                    
-                    handler(nil, error)
+                if queryResponse == nil {
+                    handler(nil, PocketPluginError.Aion.executionError("Query response is nil without errors"))
                     return
                 }
                 
-                let resultString = jsonToString(json: txHash.last?.value() as Any)
-                let result = BigInt(BigUInt.init(resultString)!)
+                if queryResponse?.error == true {
+                    handler(nil, PocketPluginError.Aion.executionError("\(queryResponse?.errorMsg ?? "Unknown query response error")"))
+                    return
+                }
+                
+                guard let txHash = queryResponse?.result?.value() as? String else {
+                    handler(nil, PocketPluginError.queryCreationError("Failed to retrieve query response result value"))
+                    return
+                }
+                guard let resultStr = HexStringUtil.removeLeadingZeroX(hex: txHash) else{
+                    handler(nil, PocketPluginError.queryCreationError("Failed to remove leading zero from result string"))
+                    return
+                }
+                
+                let result = BigInt.init(resultStr, radix: 16)
                 
                 handler(result, nil)
                 return
@@ -71,7 +82,7 @@ extension PocketAion {
         // Generic function to execute RPC methods and returns an Array of String
         private static func genericStringRPCMethod(subnetwork: String,  params: [String], method: ethRPCMethodType, handler: @escaping PocketAionStringHandler) throws {
             
-            let query = try PocketAion.createQuery(subnetwork: subnetwork, params: ["rpcMethod": method.rawValue, "rpcParams": params], decoder: nil)
+            let query = try PocketAion.createQuery(subnetwork: subnetwork, params: ["rpcMethod": method.rawValue, "rpcParams": params] as [String : Any], decoder: nil)
             
             PocketAion.shared.executeQuery(query: query) { (queryResponse, error) in
                 if error != nil {
@@ -79,21 +90,22 @@ extension PocketAion {
                     return
                 }
                 
-                guard let txHash = queryResponse?.result?.value() as? [JSON] else {
-                    let error = PocketPluginError.queryCreationError("Failed to retrieve query response result value")
-                    
-                    handler(nil, error)
+                if queryResponse == nil {
+                    handler(nil, PocketPluginError.Aion.executionError("Query response is nil without errors"))
                     return
                 }
                 
-                guard let result = txHash.last?.value() as? String else {
-                    let error = PocketPluginError.Aion.executionError("Failed to retrieve storage position raw value")
-                    
-                    handler(nil, error)
+                if queryResponse?.error == true {
+                    handler(nil, PocketPluginError.Aion.executionError("\(queryResponse?.errorMsg ?? "Unknown query response error")"))
                     return
                 }
                 
-                handler([result], nil)
+                guard let txHash = queryResponse?.result?.value() as? String else {
+                    handler(nil, PocketPluginError.queryCreationError("Failed to retrieve query response result value"))
+                    return
+                }
+                
+                handler([txHash], nil)
                 return
             }
         }
@@ -109,10 +121,18 @@ extension PocketAion {
                     return
                 }
                 
+                if queryResponse == nil {
+                    handler(nil, PocketPluginError.Aion.executionError("Query response is nil without errors"))
+                    return
+                }
+                
+                if queryResponse?.error == true {
+                    handler(nil, PocketPluginError.Aion.executionError("\(queryResponse?.errorMsg ?? "Unknown query response error")"))
+                    return
+                }
+                
                 guard let txHash = queryResponse?.result?.value() as? [JSON] else {
-                    let error = PocketPluginError.queryCreationError("Failed to retrieve query response result value")
-                    
-                    handler(nil, error)
+                    handler(nil, PocketPluginError.queryCreationError("Failed to retrieve query response result value"))
                     return
                 }
                 
@@ -157,8 +177,9 @@ extension PocketAion {
         public static func getStorageAt(address: String, subnetwork: String, position: BigInt, blockTag: BlockTag, handler: @escaping PocketAionStringHandler) throws {
             
             var params = [String]()
+            let pos0 = HexStringUtil.prependZeroX(hex: position.toString(radix: 16))
             params.append(address)
-            params.append(position.toString())
+            params.append(pos0)
             params.append(blockTag.getBlockTagString()!)
             
             try genericStringRPCMethod(subnetwork: subnetwork, params: params, method: PocketAion.ethRPCMethodType.getStorageAt, handler: { (result, error) in
@@ -270,21 +291,24 @@ extension PocketAion {
                     return
                 }
                 
-                guard let txHash = queryResponse?.result?.value() as? [JSON] else {
+                if queryResponse == nil {
+                    handler(nil, PocketPluginError.Aion.executionError("Query response is nil without errors"))
+                    return
+                }
+                
+                if queryResponse?.error == true {
+                    handler(nil, PocketPluginError.Aion.executionError("\(queryResponse?.errorMsg ?? "Unknown query response error")"))
+                    return
+                }
+                
+                guard let txHash = queryResponse?.result?.value() as? String else {
                     let error = PocketPluginError.queryCreationError("Failed to retrieve query response result value")
                     
                     handler(nil, error)
                     return
                 }
                 
-                guard let result = txHash.last?.value() as? String else {
-                    let error = PocketPluginError.Aion.executionError("Failed to retrieve storage position raw value")
-                    
-                    handler(nil, error)
-                    return
-                }
-                
-                handler([result], nil)
+                handler([txHash], nil)
                 return
             }
         }
