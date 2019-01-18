@@ -1,0 +1,1 @@
+[{"outputs":[{"name":"d","type":"uint128"}],"constant":true,"payable":false,"inputs":[{"name":"a","type":"uint128"}],"name":"multiply","type":"function"}]

@@ -29,21 +29,24 @@ extension PocketAion {
                     return
                 }
                 
-                guard let txHash = queryResponse?.result?.value() as? [JSON] else {
+                if queryResponse == nil {
+                    handler(nil, PocketPluginError.Aion.executionError("Query response is nil without errors"))
+                    return
+                }
+                
+                if queryResponse?.error == true {
+                    handler(nil, PocketPluginError.Aion.executionError("\(queryResponse?.errorMsg ?? "Unknown query response error")"))
+                    return
+                }
+                
+                guard let txHash = queryResponse?.result?.value() as? String else {
                     let error = PocketPluginError.queryCreationError("Failed to retrieve query response result value")
                     
                     handler(nil, error)
                     return
                 }
                 
-                guard let result = txHash.last?.value() as? String else {
-                    let error = PocketPluginError.Aion.executionError("Failed to retrieve storage position raw value")
-                    
-                    handler(nil, error)
-                    return
-                }
-                
-                handler([result], nil)
+                handler([txHash], nil)
                 return
             }
         }
@@ -58,15 +61,26 @@ extension PocketAion {
                     return
                 }
                 
-                guard let txHash = queryResponse?.result?.value() as? [JSON] else {
-                    let error = PocketPluginError.queryCreationError("Failed to retrieve query response result value")
-                    
-                    handler(nil, error)
+                if queryResponse == nil {
+                    handler(nil, PocketPluginError.Aion.executionError("Query response is nil without errors"))
                     return
                 }
                 
-                let resultString = PocketAion.eth.jsonToString(json: txHash.last?.value() as Any)
-                let result = BigInt(BigUInt.init(resultString)!)
+                if queryResponse?.error == true {
+                    handler(nil, PocketPluginError.Aion.executionError("\(queryResponse?.errorMsg ?? "Unknown query response error")"))
+                    return
+                }
+                
+                guard let txHash = queryResponse?.result?.value() as? String else {
+                    handler(nil, PocketPluginError.queryCreationError("Failed to retrieve query response result value"))
+                    return
+                }
+                guard let resultStr = HexStringUtil.removeLeadingZeroX(hex: txHash) else{
+                    handler(nil, PocketPluginError.queryCreationError("Failed to remove leading zero from result string"))
+                    return
+                }
+                
+                let result = BigInt.init(resultStr, radix: 16)
                 
                 handler(result, nil)
                 return

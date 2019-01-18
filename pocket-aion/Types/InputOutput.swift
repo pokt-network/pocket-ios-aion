@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftyJSON
+import enum Pocket.PocketPluginError
 
 public struct InputOutput {
     private var name: String
@@ -22,28 +23,22 @@ public struct InputOutput {
         self.type = type
     }
     
-    public static func fromInputJSONArray(inputArrayJSON: [JSON]) throws -> [InputOutput] {
+    public static func fromInputJSONArray(inputArrayJSON: JSON) throws -> [InputOutput] {
         var result = [InputOutput]()
-        for item in inputArrayJSON {
-            guard let itemObjt = item.dictionaryObject else{
-                return result
+        for item in inputArrayJSON.array! {
+            guard let inputOutput = try InputOutput.fromInputJSONObject(inputObj: item) else {
+                throw PocketPluginError.Aion.executionError("Failed create inputOutput element from JSON Object")
             }
-            
-            result.append(try InputOutput.fromInputJSONObject(inputObj: itemObjt)!)
+            result.append(inputOutput)
         }
         
         return result;
     }
     
-    public static func fromInputJSONObject(inputObj: [AnyHashable: Any]) throws -> InputOutput? {
+    public static func fromInputJSONObject(inputObj: JSON) throws -> InputOutput? {
         
-        guard let inputName = inputObj[NAME_KEY] as? String else {
-            return nil
-        }
-        
-        guard let inputType = inputObj[TYPE_KEY] as? String else {
-            return nil
-        }
+        let inputName = inputObj[NAME_KEY].stringValue
+        let inputType = inputObj[TYPE_KEY].stringValue
 
         return InputOutput(name: inputName, type: inputType);
     }
