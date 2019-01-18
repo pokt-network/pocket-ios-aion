@@ -90,6 +90,33 @@ public class AionContract {
     }
     
     // MARK: Tools
+    private static func encodeFunction(functionStr: String, params: String) throws -> String{
+        // TODO: Find a better way to do this
+        try PocketAion.initJS()
+        
+        // Generate code to run
+        guard let jsFile = try? PocketAion.getFileForResource(name: "encodeFunction", ext: "js") else{
+            throw PocketPluginError.Aion.bundledFileError("Failed to retrieve encodeFunction.js file")
+        }
+        
+        // Check if is empty and evaluate script with the transaction parameters using string format %@
+        if !jsFile.isEmpty {
+            let jsCode = String(format: jsFile, functionStr, params)
+            // Evaluate js code
+            PocketAion.jsContext?.evaluateScript(jsCode)
+        }else {
+            throw PocketPluginError.Aion.executionError("Failed to retrieve signed tx js string")
+        }
+        
+        // Retrieve
+        guard let functionCallData = PocketAion.jsContext?.objectForKeyedSubscript("functionCallData") else {
+            throw PocketPluginError.Aion.executionError("Failed to retrieve window js object")
+        }
+        
+        // return function call result
+        return functionCallData.toString()
+    }
+    
     public static func encodeFunctionCall(function: Function, params: [Any]) throws -> String{
         // Convert parameters to string
         
@@ -105,7 +132,7 @@ public class AionContract {
             throw PocketPluginError.Aion.executionError("Failed to retrieve function params.")
         }
 
-        let encodedFunction = try PocketAion.encodeFunction(functionStr: functionJSONStr, params: functionParamsStr)
+        let encodedFunction = try self.encodeFunction(functionStr: functionJSONStr, params: functionParamsStr)
         
         return encodedFunction
     }
@@ -121,7 +148,7 @@ public class AionContract {
         }
     }
 
-    public func getFunctionFromArray(name: String, functions: [Function]) -> Function?{
+    private func getFunctionFromArray(name: String, functions: [Function]) -> Function?{
         for item in functions {
             if item.getName() == name {
                 return item
@@ -130,33 +157,6 @@ public class AionContract {
         return nil
     }
     
-    public func getStringByKeyFromJSONArray(key: String, jsonArray: [JSON]) -> String?{
-        for item in jsonArray {
-            guard let jsonObj = item.dictionary else{
-                return nil
-            }
-            guard let result = jsonObj[key]?.string else{
-                return nil
-            }
-            
-            return result
-        }
-        return nil
-    }
-    
-    public func getArrayByKeyFromJSONArray(key: String, jsonArray: [JSON]) -> [JSON]?{
-        for item in jsonArray {
-            guard let jsonObj = item.dictionary else{
-                return nil
-            }
-            guard let array = jsonObj[key]?.array else{
-                return nil
-            }
-            
-            return array
-        }
-        return nil
-    }
 }
 
 extension String {

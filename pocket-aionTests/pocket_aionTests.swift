@@ -248,6 +248,25 @@ class pocket_aionTests: XCTestCase, Configuration {
 
         waitForExpectations(timeout: 4, handler: nil)
     }
+    
+    func testSendTransaction(){
+        guard let account = try? PocketAion.createWallet(subnetwork: subnetwork.mastery.toString(), data: nil) else {
+            XCTFail("Failed to create account")
+            return
+        }
+        
+        // Create an expectation
+        let expectation = self.expectation(description: "sendTransaction")
+        
+        try? PocketAion.eth.sendTransaction(wallet: account, nonce: BigInt(1), to: "0x0", data: "", value: BigInt(1), gasPrice: BigInt(1), gas: BigInt(1)) { (result, error) in
+            XCTAssertNil(error)
+            XCTAssertNotNil(result)
+            expectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 4, handler: nil)
+
+    }
 
     func testGetBlockByHash() {
         
@@ -491,6 +510,12 @@ class pocket_aionTests: XCTestCase, Configuration {
     }
     
     func testTypeEncodingAndDecoding() {
+        // Create account
+        guard let account = try? PocketAion.createWallet(subnetwork: subnetwork.mastery.toString(), data: nil) else {
+            XCTFail("Failed to create account")
+            return
+        }
+        
         // Get the contract instance
         guard let contract = try? getAionContractInstance(abiInterfaceJSON: SmartContract.types) else {
             XCTFail("Failed to get aion conract instance")
@@ -507,7 +532,6 @@ class pocket_aionTests: XCTestCase, Configuration {
         functionParams.append("0xa02e5aad91bed3a1c6bbd1958cea6f0ecedd31ac8801a435913b7ada136dcdfa")
         functionParams.append("Hello World!")
         functionParams.append("0x6c9cc34575dc7d15afd12cf98b0cdb18cbcea8788266473eef8044095da40131")
-        
         
         try? contract!.executeConstantFunction(functionName: "returnValues", fromAdress: "", functionParams: functionParams, nrg: BigInt.init(), nrgPrice: BigInt.init(), value: BigInt.init(), handler: { (result, error) in
             // Since we know from JSON ABI that the return value is an array, we can decode it
