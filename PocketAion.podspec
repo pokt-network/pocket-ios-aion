@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
 
   # Meta
   s.name         = "PocketAion"
-  s.version      = "0.0.1"
+  s.version      = "0.0.2"
   s.license      = { :type => 'MIT' }
   s.homepage     = 'https://github.com/pokt-network/pocket-ios-aion'
   s.author       = { "Pabel Nunez L." => "pabel@pokt.network'", 'Luis C. de Leon' => 'luis@pokt.network' }
@@ -26,5 +26,7 @@ Pod::Spec.new do |s|
   # Deployment Targets
   s.ios.deployment_target = '11.4'
   s.dependency 'Pocket', '~> 0.0.3'
+  s.dependency 'BigInt', '~> 3.1'
+  s.dependency 'SwiftyJSON', '~> 4.0'
 
 end
