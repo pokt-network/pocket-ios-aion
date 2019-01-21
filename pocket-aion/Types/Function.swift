@@ -105,11 +105,51 @@ public struct Function {
         return jsonString
     }
     
-    public func getEncodedFunctionCall(params: [Any]) throws ->String{
-
-        let encodedFunction = try AionContract.encodeFunctionCall(function: self, params: params)
+    public func encodeFunctionCall(params: [Any]) throws -> String {
+        // Convert parameters to string
+        
+        guard let functionJSONStr = self.getFunctionJSONString() else{
+            throw PocketPluginError.Aion.executionError("Failed to retrieve function json string.")
+        }
+        
+        guard let formattedRpcParams = RpcParamsUtil.formatRpcParams(params: params) else {
+            throw PocketPluginError.Aion.executionError("Failed to format rpc params.")
+        }
+        
+        guard let functionParamsStr = String.join(char: ",", array: formattedRpcParams) else{
+            throw PocketPluginError.Aion.executionError("Failed to retrieve function params.")
+        }
+        
+        let encodedFunction = try self.encodeFunction(functionStr: functionJSONStr, params: functionParamsStr)
         
         return encodedFunction
+    }
+    
+    private func encodeFunction(functionStr: String, params: String) throws -> String{
+        // TODO: Find a better way to do this
+        try PocketAion.initJS()
+        
+        // Generate code to run
+        guard let jsFile = try? PocketAion.getFileForResource(name: "encodeFunction", ext: "js") else{
+            throw PocketPluginError.Aion.bundledFileError("Failed to retrieve encodeFunction.js file")
+        }
+        
+        // Check if is empty and evaluate script with the transaction parameters using string format %@
+        if !jsFile.isEmpty {
+            let jsCode = String(format: jsFile, functionStr, params)
+            // Evaluate js code
+            PocketAion.jsContext?.evaluateScript(jsCode)
+        }else {
+            throw PocketPluginError.Aion.executionError("Failed to retrieve signed tx js string")
+        }
+        
+        // Retrieve
+        guard let functionCallData = PocketAion.jsContext?.objectForKeyedSubscript("functionCallData") else {
+            throw PocketPluginError.Aion.executionError("Failed to retrieve window js object")
+        }
+        
+        // return function call result
+        return functionCallData.toString()
     }
     
     public func getStringByKeyFromJSONArray(key: String, jsonArray: [JSON]) -> String?{

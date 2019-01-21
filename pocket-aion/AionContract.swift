@@ -45,7 +45,7 @@ public class AionContract {
             return
         }
         
-        let data = try function.getEncodedFunctionCall(params: functionParams)
+        let data = try function.encodeFunctionCall(params: functionParams)
         
         try PocketAion.eth.call(from: nil, to: contractAddress, gas: nrg, gasPrice: nrgPrice, value: value, data: data, blockTag: BlockTag.init(block: .LATEST), subnetwork: subnetwork) { (result, error) in
             if error != nil {
@@ -63,7 +63,7 @@ public class AionContract {
             return
         }
         
-        let data = try function.getEncodedFunctionCall(params: functionParams)
+        let data = try function.encodeFunctionCall(params: functionParams)
         
         if nonce != nil {
             try PocketAion.eth.sendTransaction(wallet: wallet, nonce: nonce!, to: contractAddress, data: data, value: value, gasPrice: nrgPrice, gas: nrg) { (result, error) in
@@ -90,52 +90,7 @@ public class AionContract {
     }
     
     // MARK: Tools
-    private static func encodeFunction(functionStr: String, params: String) throws -> String{
-        // TODO: Find a better way to do this
-        try PocketAion.initJS()
-        
-        // Generate code to run
-        guard let jsFile = try? PocketAion.getFileForResource(name: "encodeFunction", ext: "js") else{
-            throw PocketPluginError.Aion.bundledFileError("Failed to retrieve encodeFunction.js file")
-        }
-        
-        // Check if is empty and evaluate script with the transaction parameters using string format %@
-        if !jsFile.isEmpty {
-            let jsCode = String(format: jsFile, functionStr, params)
-            // Evaluate js code
-            PocketAion.jsContext?.evaluateScript(jsCode)
-        }else {
-            throw PocketPluginError.Aion.executionError("Failed to retrieve signed tx js string")
-        }
-        
-        // Retrieve
-        guard let functionCallData = PocketAion.jsContext?.objectForKeyedSubscript("functionCallData") else {
-            throw PocketPluginError.Aion.executionError("Failed to retrieve window js object")
-        }
-        
-        // return function call result
-        return functionCallData.toString()
-    }
-    
-    public static func encodeFunctionCall(function: Function, params: [Any]) throws -> String{
-        // Convert parameters to string
-        
-        guard let functionJSONStr = function.getFunctionJSONString() else{
-            throw PocketPluginError.Aion.executionError("Failed to retrieve function json string.")
-        }
-        
-        guard let formattedRpcParams = RpcParamsUtil.formatRpcParams(params: params) else {
-            throw PocketPluginError.Aion.executionError("Failed to format rpc params.")
-        }
-        
-        guard let functionParamsStr = String.join(char: ",", array: formattedRpcParams) else{
-            throw PocketPluginError.Aion.executionError("Failed to retrieve function params.")
-        }
 
-        let encodedFunction = try self.encodeFunction(functionStr: functionJSONStr, params: functionParamsStr)
-        
-        return encodedFunction
-    }
     
     private func parseContractFunctions() throws {
 
