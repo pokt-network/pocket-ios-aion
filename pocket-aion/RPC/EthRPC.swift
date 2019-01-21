@@ -41,7 +41,7 @@ extension PocketAion {
         case getProof = "eth_getProof"
     }
     
-    struct eth {
+    public struct eth {
         // Generic function to execute RPC methods and returns a BigInt
         private static func genericIntegerRPCMethod(subnetwork: String, params: [String], method: ethRPCMethodType, handler: @escaping PocketAionBigIntHandler) throws {
             

@@ -27,7 +27,7 @@ public struct Function {
     private static let TYPE_KEY = "type";
     private static let FUNCTION_TYPE_VALUE = "function";
     
-    init(constant: Bool, inputs: [InputOutput], name: String, outputs: [InputOutput], payable: Bool, functionJSON: [AnyHashable: Any]) {
+    public init(constant: Bool, inputs: [InputOutput], name: String, outputs: [InputOutput], payable: Bool, functionJSON: [AnyHashable: Any]) {
         self.constant = constant
         self.inputs = inputs
         self.name = name
