@@ -17,7 +17,7 @@ extension PocketAion {
         case peerCount = "net_peerCount"
     }
     
-    struct net {
+    public struct net {
         // Generic function to execute RPC methods and returns an Array of String
         private static func genericStringNetRPCMethod(subnetwork: String,  params: [String], method: netRPCMethodType, handler: @escaping PocketAionStringHandler) throws {
             

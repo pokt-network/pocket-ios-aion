@@ -18,7 +18,7 @@ public struct InputOutput {
     private static let NAME_KEY = "name";
     private static let TYPE_KEY = "type";
     
-    init(name: String, type: String) {
+    public init(name: String, type: String) {
         self.name = name
         self.type = type
     }

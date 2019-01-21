@@ -25,12 +25,12 @@ public class BlockTag {
         }
     }
     
-    init(str: String) {
+    public init(str: String) {
         self.blockHeight = BigInt(stringLiteral: str)
         self.defaultBlock = DefaultBlock.NONE
     }
     
-    init(block: DefaultBlock) {
+    public init(block: DefaultBlock) {
         self.blockHeight = BigInt.init()
         self.defaultBlock = block
     }
