@@ -13,7 +13,8 @@ import BigInt
 
 public typealias PocketAionStringHandler = ([String]?, Error?) -> Void
 public typealias PocketAionBigIntHandler = (BigInt?, Error?) -> Void
-public typealias PocketAionJSONHandler = ([JSON]?, Error?) -> Void
+public typealias PocketAionJSONHandler = ([String: JSON]?, Error?) -> Void
+public typealias PocketAionJSONArrayHandler = ([JSON]?, Error?) -> Void
 public typealias PocketAionBooleanHandler = (Bool?, Error?) -> Void
 public typealias PocketAionAnyHandler = ([Any]?, Error?) -> Void
 
@@ -121,11 +122,11 @@ public class PocketAion: Pocket, PocketPlugin {
             throw PocketPluginError.transactionCreationError("Failed to retrieve value")
         }
         
-        guard let gasPrice = params["gasPrice"] as? String else {
+        guard let gasPrice = params["nrgPrice"] as? String else {
             throw PocketPluginError.transactionCreationError("Failed to retrieve gas price")
         }
         
-        guard let gas =  params["gas"] as? String else {
+        guard let gas =  params["nrg"] as? String else {
             throw PocketPluginError.transactionCreationError("Failed to retrieve gas value")
         }
         

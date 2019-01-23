@@ -110,7 +110,7 @@ extension PocketAion {
             }
         }
         
-        // Generic function to execute RPC methods and returns an Array of JSON objects
+        // Generic function to execute RPC methods and returns a [String: JSON] object
         private static func genericJSONRPCMethod(subnetwork: String, params: [String], method: ethRPCMethodType, handler: @escaping PocketAionJSONHandler) throws {
             
             let query = try PocketAion.createQuery(subnetwork: subnetwork, params: ["rpcMethod": method.rawValue, "rpcParams": params], decoder: nil)
@@ -131,7 +131,7 @@ extension PocketAion {
                     return
                 }
                 
-                guard let txHash = queryResponse?.result?.value() as? [JSON] else {
+                guard let txHash = queryResponse?.result?.value() as? [String: JSON] else {
                     handler(nil, PocketPluginError.queryCreationError("Failed to retrieve query response result value"))
                     return
                 }
@@ -262,25 +262,39 @@ extension PocketAion {
             }
         }
         // eth_call, returns an String with the value of executed contract.
-        public static func call(from: String?, to: String, gas: BigInt?, gasPrice: BigInt?, value: BigInt?, data: String?, blockTag: BlockTag, subnetwork: String, handler: @escaping PocketAionStringHandler) throws {
+        public static func call(from: String?, to: String, nrg: BigInt?, nrgPrice: BigInt?, value: BigInt?, data: String?, blockTag: BlockTag, subnetwork: String, handler: @escaping PocketAionStringHandler) throws {
             
             var txParams = [AnyHashable: Any]()
             let blockTagStr = blockTag.getBlockTagString()!
             
             if from != nil {
                 txParams["from"] = from
+            }else{
+                txParams["from"] = ""
             }
-            if gas != nil {
-                txParams["gas"] = gas?.toString()
+
+            // Destination
+            txParams["to"] = to
+            
+            if nrg != nil {
+                txParams["nrg"] = HexStringUtil.prependZeroX(hex: nrg?.toString(radix: 16) ?? "0")
+            }else{
+                txParams["nrg"] = ""
             }
-            if gasPrice != nil {
-                txParams["gasPrice"] = gasPrice?.toString()
+            if nrgPrice != nil {
+                txParams["nrgPrice"] = HexStringUtil.prependZeroX(hex: nrgPrice?.toString(radix: 16) ?? "0")
+            }else{
+                txParams["nrgPrice"] = ""
             }
             if value != nil {
-                txParams["value"] = value?.toString()
+                txParams["value"] = HexStringUtil.prependZeroX(hex: value?.toString(radix: 16) ?? "0")
+            }else{
+                txParams["value"] = ""
             }
             if data != nil {
                 txParams["data"] = data
+            }else{
+                txParams["data"] = ""
             }
             
             let query = try PocketAion.createQuery(subnetwork: subnetwork, params: ["rpcMethod": PocketAion.ethRPCMethodType.call.rawValue, "rpcParams": [txParams, blockTagStr]], decoder: nil)
@@ -313,21 +327,23 @@ extension PocketAion {
             }
         }
         // eth_sendTransaction, returns a hash string
-        public static func sendTransaction(wallet: Wallet, nonce: BigInt, to: String, data: String, value: BigInt, gasPrice: BigInt, gas: BigInt, handler: @escaping PocketAionStringHandler) throws {
+        public static func sendTransaction(wallet: Wallet, nonce: BigInt, to: String, data: String, value: BigInt, nrgPrice: BigInt, nrg: BigInt, handler: @escaping PocketAionStringHandler) throws {
             
             var txParams = [AnyHashable: Any]()
-            txParams["nonce"] = nonce
+            txParams["nonce"] = nonce.toString(radix: 16)
             txParams["to"] = to
             txParams["data"] = data
-            txParams["value"] = value
-            txParams["gasPrice"] = gasPrice
-            txParams["gas"] = gas
+            txParams["value"] = value.toString(radix: 16)
+            txParams["nrgPrice"] = nrgPrice.toString(radix: 16)
+            txParams["nrg"] = nrg.toString(radix: 16)
             
             let transaction = try createTransaction(wallet: wallet, params: txParams)
             
             PocketAion.shared.sendTransaction(transaction: transaction) { (txResponse, error) in
                 if error != nil {
                     handler(nil, error)
+                }else if txResponse?.error == true{
+                    handler(nil,PocketPluginError.Aion.executionError("Send Transaction failed with error: \(txResponse?.errorMsg ?? "unkown")"))
                 }else if txResponse != nil{
                     if txResponse?.hash != nil {
                         handler([(txResponse?.hash)!], nil)
@@ -341,7 +357,7 @@ extension PocketAion {
             
         }
         
-        // eth_getBlockByHash, returns an array of JSON objects with the information of a block by hash.
+        // eth_getBlockByHash, returns a [String: JSON] object with the information of a block by hash.
         public static func getBlockByHash(blockHash: String, fullTx: Bool, subnetwork: String, handler: @escaping PocketAionJSONHandler) throws {
             
             var params = [String]()
@@ -356,14 +372,14 @@ extension PocketAion {
                 }
             })
         }
-        // eth_getBlockByNumber, returns an array of JSON objects with the information of a block by number.
+        // eth_getBlockByNumber, returns a [String: JSON] object with the information of a block by number.
         public static func getBlockByNumber(blockTag: BlockTag, fullTx: Bool, subnetwork: String, handler: @escaping PocketAionJSONHandler) throws {
             
             var params = [String]()
             params.append(blockTag.getBlockTagString()!)
             params.append(fullTx.description)
             
-            try genericJSONRPCMethod(subnetwork: subnetwork, params: params, method: PocketAion.ethRPCMethodType.getBlockByHash, handler: { (result, error) in
+            try genericJSONRPCMethod(subnetwork: subnetwork, params: params, method: PocketAion.ethRPCMethodType.getBlockByNumber, handler: { (result, error) in
                 if error != nil {
                     handler(nil, error)
                 }else {
@@ -371,12 +387,12 @@ extension PocketAion {
                 }
             })
         }
-        // eth_getTransactionByHash, returns an array of JSON objects with the information of a transaction by hash.
+        // eth_getTransactionByHash, returns a [String: JSON] object with the information of a transaction by hash.
         public static func getTransactionByHash(txHash: String, subnetwork: String, handler: @escaping PocketAionJSONHandler) throws {
             
             let params = [txHash]
             
-            try genericJSONRPCMethod(subnetwork: subnetwork, params: params, method: PocketAion.ethRPCMethodType.getBlockByHash, handler: { (result, error) in
+            try genericJSONRPCMethod(subnetwork: subnetwork, params: params, method: PocketAion.ethRPCMethodType.getTransactionByHash, handler: { (result, error) in
                 if error != nil {
                     handler(nil, error)
                 }else {
@@ -384,12 +400,12 @@ extension PocketAion {
                 }
             })
         }
-        // eth_getTransactionByBlockHashAndIndex, returns an array of JSON objects with the information of a transaction by hash and index.
+        // eth_getTransactionByBlockHashAndIndex, returns a [String: JSON] object with the information of a transaction by hash and index.
         public static func getTransactionByBlockHashAndIndex(blockHash: String, index: BigInt, subnetwork: String, handler: @escaping PocketAionJSONHandler) throws {
             
             var params = [String]()
             params.append(blockHash)
-            params.append(index.toString())
+            params.append(index.toString(radix: 16))
             
             try genericJSONRPCMethod(subnetwork: subnetwork, params: params, method: PocketAion.ethRPCMethodType.getTransactionByBlockHashAndIndex, handler: { (result, error) in
                 if error != nil {
@@ -399,12 +415,12 @@ extension PocketAion {
                 }
             })
         }
-        // eth_getTransactionByBlockNumberAndIndex, returns an array of JSON objects with the information of a transaction by number and index.
+        // eth_getTransactionByBlockNumberAndIndex, returns a [String: JSON] object with the information of a transaction by number and index.
         public static func getTransactionByBlockNumberAndIndex(blockTag: BlockTag, index: BigInt, subnetwork: String, handler: @escaping PocketAionJSONHandler) throws {
             
             var params = [String]()
-            params.append(blockTag.getBlockTagString()!)
-            params.append(index.toString())
+            params.append(HexStringUtil.prependZeroX(hex: blockTag.getBlockTagString()!))
+            params.append(index.toString(radix: 16))
             
             try genericJSONRPCMethod(subnetwork: subnetwork, params: params, method: PocketAion.ethRPCMethodType.getTransactionByBlockNumberAndIndex, handler: { (result, error) in
                 if error != nil {
@@ -427,39 +443,9 @@ extension PocketAion {
                 }
             })
         }
-        // eth_getUncleByBlockHashAndIndex, returns an array of JSON objects with the information of a block by hash and index.
-        public static func getUncleByBlockHashAndIndex(blockHash: String, index: BigInt, subnetwork: String, handler: @escaping PocketAionJSONHandler) throws {
-            
-            var params = [String]()
-            params.append(blockHash)
-            params.append(index.toString())
-            
-            try genericJSONRPCMethod(subnetwork: subnetwork, params: params, method: PocketAion.ethRPCMethodType.getUncleByBlockHashAndIndex, handler: { (result, error) in
-                if error != nil {
-                    handler(nil, error)
-                }else {
-                    handler(result, error)
-                }
-            })
-        }
-        // eth_getUncleByBlockNumberAndIndex, returns an array of JSON objects with the information of a block by number and index.
-        public static func getUncleByBlockNumberAndIndex(blockTag: BlockTag, index: BigInt, subnetwork: String, handler: @escaping PocketAionJSONHandler) throws {
-            
-            var params = [String]()
-            params.append(blockTag.getBlockTagString()!)
-            params.append(index.toString())
-            
-            try genericJSONRPCMethod(subnetwork: subnetwork, params: params, method: PocketAion.ethRPCMethodType.getUncleByBlockNumberAndIndex, handler: { (result, error) in
-                if error != nil {
-                    handler(nil, error)
-                }else {
-                    handler(result, error)
-                }
-            })
-        }
         
         // eth_getLogs, Returns an array of all logs matching a given filter object as a JSON array.
-        public static func getLogs(fromBlock: BlockTag?, toBlock: BlockTag?, address: String?, topics: [String]?, blockhash: String?, subnetwork: String, handler: @escaping PocketAionJSONHandler) throws {
+        public static func getLogs(fromBlock: BlockTag?, toBlock: BlockTag?, address: String?, topics: [String]?, blockhash: String?, subnetwork: String, handler: @escaping PocketAionJSONArrayHandler) throws {
             
             var params = [AnyHashable: Any]()
             
@@ -498,43 +484,6 @@ extension PocketAion {
                 return
             }
 
-        }
-        // eth_getWork, returns the hash of the current block, the seedHash, and the boundary condition to be met ("target") as an array of Strings.
-        public static func getWork(subnetwork: String, handler: @escaping PocketAionStringHandler) throws {
-            
-            try genericStringRPCMethod(subnetwork: subnetwork, params: [String](), method: PocketAion.ethRPCMethodType.getWork) { (result, error) in
-                if error != nil {
-                    handler(nil, error)
-                }else {
-                    handler(result, error)
-                }
-            }
-        }
-        
-        // eth_getProof, returns the account- and storage-values of the specified account including the Merkle-proof as a JSON Object.
-        public static func getProof(address: String, storageKeys: [String], blockTag: BlockTag, subnetwork: String, handler: @escaping PocketAionJSONHandler) throws {
-            
-            let block = blockTag.getBlockTagString()!
-            
-            let query = try PocketAion.createQuery(subnetwork: subnetwork, params: ["rpcMethod": PocketAion.ethRPCMethodType.getProof.rawValue, "rpcParams": [address, storageKeys, block]], decoder: nil)
-            
-            PocketAion.shared.executeQuery(query: query) { (queryResponse, error) in
-                if error != nil {
-                    handler(nil, error)
-                    return
-                }
-                
-                guard let txHash = queryResponse?.result?.value() as? [JSON] else {
-                    let error = PocketPluginError.queryCreationError("Failed to retrieve query response result value")
-                    
-                    handler(nil, error)
-                    return
-                }
-                
-                handler(txHash, nil)
-                return
-            }
-            
         }
         
         // MARK: Tools

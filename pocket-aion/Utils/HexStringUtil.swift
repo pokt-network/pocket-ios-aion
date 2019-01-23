@@ -23,7 +23,7 @@ public class HexStringUtil {
     public static func removeLeadingZeroX(hex: String) -> String? {
         if hasZeroHexPrefix(hex: hex) {
             if hex.count > ZERO_X.count {
-                return String(hex.dropLast(2))
+                return String(hex.dropFirst(2))
             }else{
                 return nil
             }

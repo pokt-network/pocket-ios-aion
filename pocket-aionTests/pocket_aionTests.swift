@@ -169,15 +169,11 @@ class pocket_aionTests: XCTestCase, Configuration {
     }
     
     func testGetStorageAt() {
-        guard let account = try? PocketAion.createWallet(subnetwork: subnetwork.mastery.toString(), data: nil) else {
-            XCTFail("Failed to create account")
-            return
-        }
-        
+
         // Create an expectation
         let expectation = self.expectation(description: "getStorageAt")
         
-        try? PocketAion.eth.getStorageAt(address: account.address, subnetwork: subnetwork.mastery.toString(), position: BigInt(21000), blockTag: BlockTag.init(block: .LATEST), handler: { (results, error) in
+        try? PocketAion.eth.getStorageAt(address: "0xa02c81badfb0018917d24b08a6ca1bb443c9f5271885cdff8878f5c9ef7abac1", subnetwork: subnetwork.prod.toString(), position: BigInt(0), blockTag: BlockTag.init(block: .LATEST), handler: { (results, error) in
             XCTAssertNil(error)
             XCTAssertNotNil(results)
             expectation.fulfill()
@@ -191,7 +187,7 @@ class pocket_aionTests: XCTestCase, Configuration {
         // Create an expectation
         let expectation = self.expectation(description: "getBlockTransactionCountByHash")
         
-        try? PocketAion.eth.getBlockTransactionCountByHash(blockHash: "0x0", subnetwork: subnetwork.mastery.toString(), handler: { (result, error) in
+        try? PocketAion.eth.getBlockTransactionCountByHash(blockHash: "0xa9316ee7207cf2ac1fd886673d5c14835a86cda97eae8f0d382b95678932c8d0", subnetwork: subnetwork.mastery.toString(), handler: { (result, error) in
             XCTAssertNil(error)
             XCTAssertNotNil(result)
             expectation.fulfill()
@@ -204,7 +200,7 @@ class pocket_aionTests: XCTestCase, Configuration {
         // Create an expectation
         let expectation = self.expectation(description: "getBlockTransactionCountByNumber")
         
-        try? PocketAion.eth.getBlockTransactionCountByNumber(blockTag: BlockTag.init(str: "1234"), subnetwork: subnetwork.mastery.toString(), handler: { (result, error) in
+        try? PocketAion.eth.getBlockTransactionCountByNumber(blockTag: BlockTag.init(str: "1323288"), subnetwork: subnetwork.mastery.toString(), handler: { (result, error) in
             XCTAssertNil(error)
             XCTAssertNotNil(result)
             expectation.fulfill()
@@ -232,15 +228,11 @@ class pocket_aionTests: XCTestCase, Configuration {
     }
 
     func testCall() {
-        guard let account = try? PocketAion.createWallet(subnetwork: subnetwork.mastery.toString(), data: nil) else {
-            XCTFail("Failed to create account")
-            return
-        }
-        
+
         // Create an expectation
         let expectation = self.expectation(description: "call")
         
-        try? PocketAion.eth.call(from: nil, to: account.address, gas: 2000000000, gasPrice: 2000000000, value: 2000000000, data: nil, blockTag: BlockTag.init(block: .LATEST), subnetwork: subnetwork.mastery.toString(), handler: { (result, error) in
+        try? PocketAion.eth.call(from: nil, to: "0xA0707404B9BE7a5F630fCed3763d28FA5C988964fDC25Aa621161657a7Bf4b89", nrg: BigInt.init(50000), nrgPrice: BigInt.init(20000000000), value: BigInt.init(20000000000), data: "0xbbaa08200000000000000000000000000000014c00000000000000000000000000000154", blockTag: BlockTag.init(block: .LATEST), subnetwork: subnetwork.mastery.toString(), handler: { (result, error) in
             XCTAssertNil(error)
             XCTAssertNotNil(result)
             expectation.fulfill()
@@ -258,13 +250,13 @@ class pocket_aionTests: XCTestCase, Configuration {
         // Create an expectation
         let expectation = self.expectation(description: "sendTransaction")
         
-        try? PocketAion.eth.sendTransaction(wallet: account, nonce: BigInt(1), to: "0x0", data: "", value: BigInt(1), gasPrice: BigInt(1), gas: BigInt(1)) { (result, error) in
+        try? PocketAion.eth.sendTransaction(wallet: account, nonce: BigInt(1), to: "0xA0707404B9BE7a5F630fCed3763d28FA5C988964fDC25Aa621161657a7Bf4b89", data: "", value: BigInt.init(20000000000), nrgPrice: BigInt.init(20000000000), nrg: BigInt.init(50000)) { (result, error) in
             XCTAssertNil(error)
             XCTAssertNotNil(result)
             expectation.fulfill()
         }
         
-        waitForExpectations(timeout: 4, handler: nil)
+        waitForExpectations(timeout: 20, handler: nil)
 
     }
 
@@ -273,7 +265,7 @@ class pocket_aionTests: XCTestCase, Configuration {
         // Create an expectation
         let expectation = self.expectation(description: "getBlockByHash")
         
-        try? PocketAion.eth.getBlockByHash(blockHash: "0x0", fullTx: false, subnetwork: subnetwork.mastery.toString(), handler: { (result, error) in
+        try? PocketAion.eth.getBlockByHash(blockHash: "0xa9316ee7207cf2ac1fd886673d5c14835a86cda97eae8f0d382b95678932c8d0", fullTx: false, subnetwork: subnetwork.mastery.toString(), handler: { (result, error) in
             XCTAssertNil(error)
             XCTAssertNotNil(result)
             expectation.fulfill()
@@ -287,7 +279,7 @@ class pocket_aionTests: XCTestCase, Configuration {
         // Create an expectation
         let expectation = self.expectation(description: "getBlockByNumber")
         
-        try? PocketAion.eth.getBlockByNumber(blockTag: BlockTag.init(str: "1234"), fullTx: true, subnetwork: subnetwork.mastery.toString(), handler: { (result, error) in
+        try? PocketAion.eth.getBlockByNumber(blockTag: BlockTag.init(block: .LATEST), fullTx: true, subnetwork: subnetwork.mastery.toString(), handler: { (result, error) in
             XCTAssertNil(error)
             XCTAssertNotNil(result)
             expectation.fulfill()
@@ -301,7 +293,7 @@ class pocket_aionTests: XCTestCase, Configuration {
         // Create an expectation
         let expectation = self.expectation(description: "getTransactionByHash")
         
-        try? PocketAion.eth.getTransactionByHash(txHash: "0x0", subnetwork: subnetwork.mastery.toString(), handler: { (result, error) in
+        try? PocketAion.eth.getTransactionByHash(txHash: "0x123075c535309a3b0dbbe5c97a7a5298ec7f1bd3ae1b684ec529df3ce16cab2e", subnetwork: subnetwork.mastery.toString(), handler: { (result, error) in
             XCTAssertNil(error)
             XCTAssertNotNil(result)
             expectation.fulfill()
@@ -315,7 +307,7 @@ class pocket_aionTests: XCTestCase, Configuration {
         // Create an expectation
         let expectation = self.expectation(description: "getTransactionByBlockHashAndIndex")
         
-        try? PocketAion.eth.getTransactionByBlockHashAndIndex(blockHash: "0x0", index: 1234, subnetwork: subnetwork.mastery.toString(), handler: { (result, error) in
+        try? PocketAion.eth.getTransactionByBlockHashAndIndex(blockHash: "0x20b43393f0e0d2de098f74ed97cc7fdb06a6857d391ead0fd8756b9c18bb98e6", index: BigInt(0), subnetwork: subnetwork.mastery.toString(), handler: { (result, error) in
             XCTAssertNil(error)
             XCTAssertNotNil(result)
             expectation.fulfill()
@@ -324,12 +316,12 @@ class pocket_aionTests: XCTestCase, Configuration {
         waitForExpectations(timeout: 4, handler: nil)
     }
 
-    func testetTransactionByBlockNumberAndIndex() {
+    func testGetTransactionByBlockNumberAndIndex() {
         
         // Create an expectation
         let expectation = self.expectation(description: "getTransactionByBlockNumberAndIndex")
         
-        try? PocketAion.eth.getTransactionByBlockNumberAndIndex(blockTag: .init(str: "1234"), index: 1234, subnetwork: subnetwork.mastery.toString(), handler: { (result, error) in
+        try? PocketAion.eth.getTransactionByBlockNumberAndIndex(blockTag: .init(str: "1329667"), index: 0, subnetwork: subnetwork.mastery.toString(), handler: { (result, error) in
             XCTAssertNil(error)
             XCTAssertNotNil(result)
             expectation.fulfill()
@@ -343,7 +335,7 @@ class pocket_aionTests: XCTestCase, Configuration {
         // Create an expectation
         let expectation = self.expectation(description: "getTransactionReceipt")
         
-        try? PocketAion.eth.getTransactionReceipt(txHash: "0x0", subnetwork: subnetwork.mastery.toString(), handler: { (result, error) in
+        try? PocketAion.eth.getTransactionReceipt(txHash: "0xddb6499420a12ce78cd43874565507aa32b101bd7ae0ce3aae3175960cefac40", subnetwork: subnetwork.mastery.toString(), handler: { (result, error) in
             XCTAssertNil(error)
             XCTAssertNotNil(result)
             expectation.fulfill()
@@ -351,91 +343,32 @@ class pocket_aionTests: XCTestCase, Configuration {
         
         waitForExpectations(timeout: 4, handler: nil)
 
-    }
-    
-    func testGetUncleByBlockHashAndIndex() {
-        // Create an expectation
-        let expectation = self.expectation(description: "getUncleByBlockHashAndIndex")
-        
-        try? PocketAion.eth.getUncleByBlockHashAndIndex(blockHash: "0x0", index: 1234, subnetwork: subnetwork.mastery.toString(), handler: { (result, error) in
-            XCTAssertNil(error)
-            XCTAssertNotNil(result)
-            expectation.fulfill()
-        })
-        
-        waitForExpectations(timeout: 4, handler: nil)
-    }
-
-    func testGetUncleByBlockNumberAndIndex() {
-        
-        // Create an expectation
-        let expectation = self.expectation(description: "getUncleByBlockNumberAndIndex")
-        
-        try? PocketAion.eth.getUncleByBlockNumberAndIndex(blockTag: .init(str: "1234"), index: 1234, subnetwork: subnetwork.mastery.toString(), handler: { (result, error) in
-            XCTAssertNil(error)
-            XCTAssertNotNil(result)
-            expectation.fulfill()
-        })
-        
-        waitForExpectations(timeout: 4, handler: nil)
     }
     
     func testGetLogsByBlockHash() {
         // Create an expectation
         let expectation = self.expectation(description: "getLogs")
         
-        try? PocketAion.eth.getLogs(fromBlock: nil, toBlock: nil, address: nil, topics: nil, blockhash: "0x0", subnetwork: subnetwork.mastery.toString(), handler: { (result, error) in
+        try? PocketAion.eth.getLogs(fromBlock: nil, toBlock: nil, address: nil, topics: nil, blockhash: "0xc89d0feda0a748e701b03b90e7e04f24b3c499439bf0d0dc630e2d590388f4a8", subnetwork: subnetwork.mastery.toString(), handler: { (result, error) in
             XCTAssertNil(error)
             XCTAssertNotNil(result)
             expectation.fulfill()
         })
         
-        waitForExpectations(timeout: 4, handler: nil)
+        waitForExpectations(timeout: 30, handler: nil)
     }
     
     func testGetLogsByBlockNumberTag() {
         // Create an expectation
         let expectation = self.expectation(description: "getLogs")
         
-        try? PocketAion.eth.getLogs(fromBlock: BlockTag.init(str: "1234"), toBlock: BlockTag.init(str: "2000"), address: nil, topics: nil, blockhash: nil, subnetwork: subnetwork.mastery.toString(), handler: { (result, error) in
+        try? PocketAion.eth.getLogs(fromBlock: nil, toBlock: BlockTag.init(block: .LATEST), address: nil, topics: nil, blockhash: nil, subnetwork: subnetwork.mastery.toString(), handler: { (result, error) in
             XCTAssertNil(error)
             XCTAssertNotNil(result)
             expectation.fulfill()
         })
         
-        waitForExpectations(timeout: 4, handler: nil)
-    }
-
-    func testGetWork() {
-        // Create an expectation
-        let expectation = self.expectation(description: "getWork")
-        
-        try? PocketAion.eth.getWork(subnetwork: subnetwork.mastery.toString(), handler: { (result, error) in
-            XCTAssertNil(error)
-            XCTAssertNotNil(result)
-            expectation.fulfill()
-        })
-        
-        waitForExpectations(timeout: 4, handler: nil)
-    }
-    // getProof
-    // TODO: More scenarios for getProof
-    func testGetProof() {
-        guard let account = try? PocketAion.createWallet(subnetwork: subnetwork.mastery.toString(), data: nil) else {
-            XCTFail("Failed to create account")
-            return
-        }
-        
-        // Create an expectation
-        let expectation = self.expectation(description: "getProof")
-        
-        try? PocketAion.eth.getProof(address: account.address, storageKeys: [String](), blockTag: BlockTag.init(block: .LATEST), subnetwork: subnetwork.mastery.toString(), handler: { (result, error) in
-            XCTAssertNil(error)
-            XCTAssertNotNil(result)
-            expectation.fulfill()
-        })
-        
-        waitForExpectations(timeout: 4, handler: nil)
+        waitForExpectations(timeout: 30, handler: nil)
     }
     
     // MARK: NET RPC Tests
@@ -481,8 +414,8 @@ class pocket_aionTests: XCTestCase, Configuration {
     
     func testSimpleConstantFunctionCall() {
         // Get the contract instance
-        guard let contract = try? getAionContractInstance(abiInterfaceJSON: SmartContract.simple) else {
-            XCTFail("Failed to get aion conract instance")
+        guard let contract = try? getAionContractInstance(abiInterfaceJSON: SmartContract.simple, contractAdress: "0xA0707404B9BE7a5F630fCed3763d28FA5C988964fDC25Aa621161657a7Bf4b89") else {
+            XCTFail("Failed to get aion contract instance")
             return
         }
         
@@ -491,17 +424,17 @@ class pocket_aionTests: XCTestCase, Configuration {
         
         // Prepare parameters
         var functionParams = [Any]()
+        functionParams.append(BigInt.init(2))
         functionParams.append(BigInt.init(10))
         
-        try? contract!.executeConstantFunction(functionName: "multiply", fromAdress: "", functionParams: functionParams, nrg: BigInt.init(), nrgPrice: BigInt.init(), value: BigInt.init(), handler: { (result, error) in
+        try? contract!.executeConstantFunction(functionName: "multiply", fromAdress: "", functionParams: functionParams, nrg: BigInt.init(50000), nrgPrice: BigInt.init(20000000000), value: BigInt.init(20000000000), handler: { (result, error) in
             // Since we know from JSON ABI that the return value is a uint128 we can check if it's type BigInteger
-            // Result should be input * 7
-            // Since input was 10, result = 70
+            // Result should be 2 * 10 = 20
             XCTAssertNil(error)
             XCTAssertNotNil(result)
             let hexResult = result?.first as? String
             let hexResultBigInt = BigInt.init(HexStringUtil.removeLeadingZeroX(hex: hexResult ?? "0") ?? "0", radix: 16)
-            XCTAssertEqual(hexResultBigInt, BigInt("70"))
+            XCTAssertEqual(hexResultBigInt, BigInt("20"))
             
             expectation.fulfill()
         })
@@ -510,14 +443,9 @@ class pocket_aionTests: XCTestCase, Configuration {
     }
     
     func testTypeEncodingAndDecoding() {
-        // Create account
-        guard let account = try? PocketAion.createWallet(subnetwork: subnetwork.mastery.toString(), data: nil) else {
-            XCTFail("Failed to create account")
-            return
-        }
         
         // Get the contract instance
-        guard let contract = try? getAionContractInstance(abiInterfaceJSON: SmartContract.types) else {
+        guard let contract = try? getAionContractInstance(abiInterfaceJSON: SmartContract.simple, contractAdress: "0xA0707404B9BE7a5F630fCed3763d28FA5C988964fDC25Aa621161657a7Bf4b89") else {
             XCTFail("Failed to get aion conract instance")
             return
         }
@@ -529,11 +457,9 @@ class pocket_aionTests: XCTestCase, Configuration {
         var functionParams = [String]()
         functionParams.append(BigInt.init(10).toString(radix: 16))
         functionParams.append("true")
-        functionParams.append("0xa02e5aad91bed3a1c6bbd1958cea6f0ecedd31ac8801a435913b7ada136dcdfa")
         functionParams.append("Hello World!")
-        functionParams.append("0x6c9cc34575dc7d15afd12cf98b0cdb18cbcea8788266473eef8044095da40131")
         
-        try? contract!.executeConstantFunction(functionName: "returnValues", fromAdress: "", functionParams: functionParams, nrg: BigInt.init(), nrgPrice: BigInt.init(), value: BigInt.init(), handler: { (result, error) in
+        try? contract!.executeConstantFunction(functionName: "echo", fromAdress: "", functionParams: functionParams, nrg: BigInt.init(), nrgPrice: BigInt.init(), value: BigInt.init(), handler: { (result, error) in
             // Since we know from JSON ABI that the return value is an array, we can decode it
             XCTAssertNil(error)
             XCTAssertNotNil(result)
@@ -544,7 +470,7 @@ class pocket_aionTests: XCTestCase, Configuration {
     }
 
     // MARK: Tools
-    func getAionContractInstance(abiInterfaceJSON: SmartContract) throws -> AionContract?{
+    func getAionContractInstance(abiInterfaceJSON: SmartContract, contractAdress: String) throws -> AionContract?{
         var abiInterface = ""
         let pocketAion = PocketAion.init()
         
@@ -560,7 +486,7 @@ class pocket_aionTests: XCTestCase, Configuration {
             return nil
         }
         
-        return try AionContract.init(pocketAion: pocketAion, abiDefinition: jsonArray, contractAddress: "0x0", subnetwork: subnetwork.mastery.toString())
+        return try AionContract.init(pocketAion: pocketAion, abiDefinition: jsonArray, contractAddress: contractAdress, subnetwork: subnetwork.mastery.toString())
     }
     // MARK: Performance tests
     func testCreateWalletPerformance() {
