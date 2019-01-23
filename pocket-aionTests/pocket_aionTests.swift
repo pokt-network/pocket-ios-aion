@@ -253,7 +253,7 @@ class pocket_aionTests: XCTestCase, Configuration {
             XCTAssertNotNil(result)
             expectation.fulfill()
             
-            try? PocketAion.eth.sendTransaction(wallet: account, nonce: result!, to: "0xA0707404B9BE7a5F630fCed3763d28FA5C988964fDC25Aa621161657a7Bf4b89", data: "", value: BigInt.init(20000000000), nrgPrice: BigInt.init(20000000000), nrg: BigInt.init(50000)) { (result, error) in
+            try? PocketAion.eth.sendTransaction(wallet: account, nonce: result!, to: "0xa07743f4170ded07da3ccd2ad926f9e684a5f61e90d018a3c5d8ea60a8b3406a", data: "", value: BigInt.init(20000000000), nrgPrice: BigInt.init(20000000000), nrg: BigInt.init(50000)) { (result, error) in
                 XCTAssertNil(error)
                 XCTAssertNotNil(result)
                 expectation2.fulfill()
