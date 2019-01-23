@@ -40,8 +40,9 @@ extension PocketAion {
                 }
                 
                 guard let txHash = queryResponse?.result?.value() as? String else {
-                    let error = PocketPluginError.queryCreationError("Failed to retrieve query response result value")
                     
+                    let error = PocketPluginError.queryCreationError("Failed to retrieve query response result value")
+  
                     handler(nil, error)
                     return
                 }
@@ -71,16 +72,45 @@ extension PocketAion {
                     return
                 }
                 
-                guard let txHash = queryResponse?.result?.value() as? String else {
+                guard let txHash = (queryResponse?.result?.value() as? AnyHashable) as? Int else {
                     handler(nil, PocketPluginError.queryCreationError("Failed to retrieve query response result value"))
                     return
                 }
-                guard let resultStr = HexStringUtil.removeLeadingZeroX(hex: txHash) else{
-                    handler(nil, PocketPluginError.queryCreationError("Failed to remove leading zero from result string"))
+                
+                let result = BigInt.init(txHash)
+                
+                handler(result, nil)
+                return
+            }
+        }
+        
+        private static func genericBoolNetRPCMethod(subnetwork: String,  params: [String], method: netRPCMethodType, handler: @escaping PocketAionBooleanHandler) throws {
+            
+            let query = try PocketAion.createQuery(subnetwork: subnetwork, params: ["rpcMethod": method.rawValue, "rpcParams": params], decoder: nil)
+            
+            PocketAion.shared.executeQuery(query: query) { (queryResponse, error) in
+                if error != nil {
+                    handler(nil, error)
                     return
                 }
                 
-                let result = BigInt.init(resultStr, radix: 16)
+                if queryResponse == nil {
+                    handler(nil, PocketPluginError.Aion.executionError("Query response is nil without errors"))
+                    return
+                }
+                
+                if queryResponse?.error == true {
+                    handler(nil, PocketPluginError.Aion.executionError("\(queryResponse?.errorMsg ?? "Unknown query response error")"))
+                    return
+                }
+                
+                guard let result = queryResponse?.result?.value() as? Bool else {
+                    
+                    let error = PocketPluginError.queryCreationError("Failed to retrieve query response result value")
+                    
+                    handler(nil, error)
+                    return
+                }
                 
                 handler(result, nil)
                 return
@@ -99,12 +129,11 @@ extension PocketAion {
         }
         // net_listening, returns Boolean - true when listening, otherwise false
         public static func listening(subnetwork: String, handler: @escaping PocketAionBooleanHandler) throws{
-            try genericStringNetRPCMethod(subnetwork: subnetwork, params: [String](), method: PocketAion.netRPCMethodType.listening, handler: { (result, error) in
+            try genericBoolNetRPCMethod(subnetwork: subnetwork, params: [String](), method: PocketAion.netRPCMethodType.listening, handler: { (result, error) in
                 if error != nil {
                     handler(nil, error)
                 }else {
-                    let bool = Bool.init(result?.first ?? "false")
-                    handler(bool, error)
+                    handler(result, error)
                 }
             })
         }

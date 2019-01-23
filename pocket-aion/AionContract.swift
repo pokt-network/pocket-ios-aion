@@ -47,7 +47,7 @@ public class AionContract {
         
         let data = try function.encodeFunctionCall(params: functionParams)
         
-        try PocketAion.eth.call(from: nil, to: contractAddress, gas: nrg, gasPrice: nrgPrice, value: value, data: data, blockTag: BlockTag.init(block: .LATEST), subnetwork: subnetwork) { (result, error) in
+        try PocketAion.eth.call(from: nil, to: contractAddress, nrg: nrg, nrgPrice: nrgPrice, value: value, data: data, blockTag: BlockTag.init(block: .LATEST), subnetwork: subnetwork) { (result, error) in
             if error != nil {
                 handler(nil,error)
             }else if result != nil {
@@ -66,7 +66,7 @@ public class AionContract {
         let data = try function.encodeFunctionCall(params: functionParams)
         
         if nonce != nil {
-            try PocketAion.eth.sendTransaction(wallet: wallet, nonce: nonce!, to: contractAddress, data: data, value: value, gasPrice: nrgPrice, gas: nrg) { (result, error) in
+            try PocketAion.eth.sendTransaction(wallet: wallet, nonce: nonce!, to: contractAddress, data: data, value: value, nrgPrice: nrgPrice, nrg: nrg) { (result, error) in
                 if error != nil {
                     handler(nil,error)
                 }else if result != nil {
