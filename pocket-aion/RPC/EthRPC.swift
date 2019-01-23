@@ -288,8 +288,6 @@ extension PocketAion {
             }
             if value != nil {
                 txParams["value"] = HexStringUtil.prependZeroX(hex: value?.toString(radix: 16) ?? "0")
-            }else{
-                txParams["value"] = ""
             }
             if data != nil {
                 txParams["data"] = data

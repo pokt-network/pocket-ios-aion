@@ -29,7 +29,7 @@ public class AionContract {
         try parseContractFunctions()
     }
     
-    public func executeConstantFunction(functionName: String, fromAdress: String, functionParams: [Any], nrg: BigInt, nrgPrice: BigInt, value: BigInt, handler: @escaping PocketAionAnyHandler) throws {
+    public func executeConstantFunction(functionName: String, fromAdress: String?, functionParams: [Any], nrg: BigInt?, nrgPrice: BigInt?, value: BigInt?, handler: @escaping PocketAionAnyHandler) throws {
         
         if functions.isEmpty {
             handler(nil, PocketPluginError.Aion.executionError("Failed to get functions from abi definition"))
