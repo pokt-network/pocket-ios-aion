@@ -66,9 +66,7 @@ public class RpcParamsUtil {
         }else if objParam is String {
             currStr = "\"\(objParam)\""
         }else if objParam is BigInt {
-            let objParamString = (objParam as! BigInt).toString(radix: 16)
-            let formattedObjParam = HexStringUtil.prependZeroX(hex: objParamString)
-            currStr = "\"\(formattedObjParam)\""
+            currStr = "bigInt(" + "\"" + (objParam as! BigInt).toString(radix: 16) + "\"" + ",16).value"
         }
         return currStr
     }

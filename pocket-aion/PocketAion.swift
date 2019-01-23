@@ -38,6 +38,7 @@ public class PocketAion: Pocket, PocketPlugin {
         // Retrieve and evaluate all javascript dependencies
         let cryptoPolyfillJS = try getFileForResource(name: "crypto-polyfill", ext: "js")
         let promiseJs = try getFileForResource(name: "promiseDeps", ext: "js")
+        let bigIntJs = try getFileForResource(name: "bigInt-polyfill", ext: "js")
         let distJS = try getFileForResource(name: "web3Aion", ext: "js")
         
         // Create window object
@@ -48,6 +49,9 @@ public class PocketAion: Pocket, PocketPlugin {
         
         // Add timeout and promises
         jsContext?.evaluateScript(promiseJs)
+        
+        // Add timeout and promises
+        jsContext?.evaluateScript(bigIntJs)
         
         // Add aion web3
         jsContext?.evaluateScript(distJS)
