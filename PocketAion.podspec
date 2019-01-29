@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
 
   # Meta
   s.name         = "PocketAion"
-  s.version      = "0.0.6"
+  s.version      = "0.0.7"
   s.license      = { :type => 'MIT' }
   s.homepage     = 'https://github.com/pokt-network/pocket-ios-aion'
   s.author       = { "Pabel Nunez L." => "pabel@pokt.network'", 'Luis C. de Leon' => 'luis@pokt.network' }
@@ -20,6 +20,7 @@ Pod::Spec.new do |s|
   s.source            = { :git => 'https://github.com/pokt-network/pocket-ios-aion.git', :tag => s.version.to_s }
   s.source_files      = 'pocket-aion/**/*.{swift}'
   s.exclude_files     = 'docs/*', 'pocket-aionTests/**/*.{swift}'
+  s.resources         = 'pocket-aion/aion.bundle'
   s.swift_version     = '4.0'
   s.cocoapods_version = '>= 1.4.0'
 
