@@ -20,7 +20,7 @@ public class AionContract {
     private var subnetwork: String
     private var functions = [Function]()
     
-    init(pocketAion: PocketAion, abiDefinition: [JSON], contractAddress: String, subnetwork: String) throws {
+    public init(pocketAion: PocketAion, abiDefinition: [JSON], contractAddress: String, subnetwork: String) throws {
         self.pocketAion = pocketAion
         self.abiDefinition = abiDefinition
         self.contractAddress = contractAddress
