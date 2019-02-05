@@ -5,6 +5,7 @@
 //  Created by Pabel Nunez Landestoy on 1/7/19.
 //  Copyright © 2019 Pocket Network. All rights reserved.
 //
+// BlockTag helps to use default values for earliest, latest or especify a block number
 
 import Foundation
 import BigInt

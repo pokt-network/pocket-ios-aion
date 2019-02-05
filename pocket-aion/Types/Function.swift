@@ -5,6 +5,7 @@
 //  Created by Pabel Nunez Landestoy on 1/14/19.
 //  Copyright © 2019 Pocket Network. All rights reserved.
 //
+// Struct that handles the ABI Function elements and properties
 
 import Foundation
 import SwiftyJSON

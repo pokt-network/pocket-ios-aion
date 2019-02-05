@@ -5,6 +5,8 @@
 //  Created by Pabel Nunez Landestoy on 1/4/19.
 //  Copyright © 2019 Pocket Network. All rights reserved.
 //
+// Structure that extends PocketAion with the NET JSON RPC Methods with proper parsing.
+// Usage: PocketAion.net
 
 import Foundation
 import Pocket

@@ -5,6 +5,7 @@
 //  Created by Pabel Nunez Landestoy on 1/15/19.
 //  Copyright © 2019 Pocket Network. All rights reserved.
 //
+// Structs that parses the inputs and outputs of the function JSON ABI
 
 import Foundation
 import SwiftyJSON

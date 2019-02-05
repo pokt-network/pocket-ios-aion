@@ -5,6 +5,7 @@
 //  Created by Pabel Nunez Landestoy on 1/11/19.
 //  Copyright © 2019 Pocket Network. All rights reserved.
 //
+// AionContract abstracts the complexity of interacting with an smart contract 
 
 import Foundation
 import SwiftyJSON
