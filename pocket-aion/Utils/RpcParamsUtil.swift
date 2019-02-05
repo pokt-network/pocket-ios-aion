@@ -5,6 +5,7 @@
 //  Created by Pabel Nunez Landestoy on 1/18/19.
 //  Copyright © 2019 Pocket Network. All rights reserved.
 //
+// Utility that helps formatting the RPC Params for function encoding.
 
 import Foundation
 import BigInt

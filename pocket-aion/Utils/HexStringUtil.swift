@@ -5,6 +5,7 @@
 //  Created by Pabel Nunez Landestoy on 1/16/19.
 //  Copyright © 2019 Pocket Network. All rights reserved.
 //
+// Simple util that adds, remove or checks for leading zeroX (0x) in an string
 
 import Foundation
 

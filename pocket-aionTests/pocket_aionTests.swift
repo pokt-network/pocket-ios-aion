@@ -20,6 +20,8 @@ class pocket_aionTests: XCTestCase, Configuration {
         }
     }
     
+    public let pocketTestContractAddress = "0xA0707404B9BE7a5F630fCed3763d28FA5C988964fDC25Aa621161657a7Bf4b89"
+    
     public enum subnetwork: Int {
         case mastery = 32
         case prod = 256
@@ -374,6 +376,19 @@ class pocket_aionTests: XCTestCase, Configuration {
         })
         
         waitForExpectations(timeout: 30, handler: nil)
+    }
+    
+    func testEstimateGas() {
+        // Create an expectation
+        let expectation = self.expectation(description: "estimateGas")
+        
+        try? PocketAion.eth.estimateGas(to: pocketTestContractAddress, fromAddress: nil, nrg: nil, nrgPrice: nil, value: nil, data: "0xbbaa0820000000000000000000000000000000020000000000000000000000000000000a", subnetwork: subnetwork.mastery.toString(), blockTag: BlockTag.init(block: .LATEST)) { (result, error) in
+            XCTAssertNil(error)
+            XCTAssertNotNil(result)
+            expectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 4, handler: nil)
     }
     
     // MARK: NET RPC Tests

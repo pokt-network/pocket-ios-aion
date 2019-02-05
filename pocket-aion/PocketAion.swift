@@ -5,6 +5,8 @@
 //  Created by Pabel Nunez Landestoy on 12/12/18.
 //  Copyright © 2018 Pocket Network. All rights reserved.
 //
+//  PocketAion interface to create and import wallets, also handles the create query, transaction
+//  and tx encoding
 
 import Foundation
 import Pocket

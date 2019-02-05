@@ -5,6 +5,8 @@
 //  Created by Pabel Nunez Landestoy on 1/4/19.
 //  Copyright © 2019 Pocket Network. All rights reserved.
 //
+// Structure that extends PocketAion with the ETH JSON RPC Methods with proper parsing.
+// Usage: PocketAion.eth
 
 import Foundation
 import Pocket
@@ -39,6 +41,7 @@ extension PocketAion {
         case getWork = "eth_getWork"
         case getLogs = "eth_getLogs"
         case getProof = "eth_getProof"
+        case estimateGas = "eth_estimateGas"
     }
     
     public struct eth {
@@ -483,6 +486,68 @@ extension PocketAion {
             }
 
         }
+        
+        // eth_estimateGas
+        public static func estimateGas(to: String, fromAddress: String?, nrg: BigInt?, nrgPrice: BigInt?, value: BigInt?, data: String?, subnetwork: String, blockTag: BlockTag, handler: @escaping PocketAionBigIntHandler) throws {
+            
+            var txParams = [AnyHashable: Any]()
+            let blockTagStr = blockTag.getBlockTagString()!
+            
+            txParams["to"] = to
+            
+            if (fromAddress != nil) {
+                txParams["from"] = fromAddress
+            }
+            if (nrg != nil) {
+                txParams["nrg"] =  HexStringUtil.prependZeroX(hex: nrg!.toString(radix: 16))
+            }
+            if (nrgPrice != nil) {
+                txParams["nrgPrice"] =  HexStringUtil.prependZeroX(hex: nrgPrice!.toString(radix: 16))
+            }
+            if (value != nil) {
+                txParams["value"] =  HexStringUtil.prependZeroX(hex: value!.toString(radix: 16))
+            }
+            if (data != nil) {
+                txParams["data"] = data
+            }
+            
+            let query = try PocketAion.createQuery(subnetwork: subnetwork, params: ["rpcMethod": PocketAion.ethRPCMethodType.estimateGas.rawValue, "rpcParams": [txParams, blockTagStr]], decoder: nil)
+            
+            PocketAion.shared.executeQuery(query: query) { (queryResponse, error) in
+                if error != nil {
+                    handler(nil, error)
+                    return
+                }
+                
+                if queryResponse == nil {
+                    handler(nil, PocketPluginError.Aion.executionError("Query response is nil without errors"))
+                    return
+                }
+                
+                if queryResponse?.error == true {
+                    handler(nil, PocketPluginError.Aion.executionError("\(queryResponse?.errorMsg ?? "Unknown query response error")"))
+                    return
+                }
+                
+                guard let txHash = queryResponse?.result?.value() as? String else {
+                    let error = PocketPluginError.queryCreationError("Failed to retrieve query response result value")
+                    
+                    handler(nil, error)
+                    return
+                }
+                
+                guard let resultStr = HexStringUtil.removeLeadingZeroX(hex: txHash) else{
+                    handler(nil, PocketPluginError.queryCreationError("Failed to remove leading zero from result string"))
+                    return
+                }
+                
+                let result = BigInt.init(resultStr, radix: 16)
+                
+                handler(result, nil)
+                return
+            }
+        }
+        
         
         // MARK: Tools
         public static func jsonToString(json: Any) -> String {
