@@ -6586,7 +6586,7 @@
 			})(typeof module === 'undefined' || module, this);
 
 		}, {
-			"buffer": 22
+			"buffer": 51
 		}],
 		21: [function (require, module, exports) {
 			var r;
@@ -27098,7 +27098,9 @@
 				return c.charCodeAt(0)
 			}
 
-		}, {}],
+		}, {
+              "buffer": 51
+              }],
 		188: [function (require, module, exports) {
 			var assert = require('nanoassert')
 			var wasm = require('./blake2b')()
@@ -27558,7 +27560,7 @@
 		190: [function (require, module, exports) {
 			arguments[4][20][0].apply(exports, arguments)
 		}, {
-			"buffer": 22,
+			"buffer": 51,
 			"dup": 20
 		}],
 		191: [function (require, module, exports) {
@@ -45499,7 +45501,7 @@
 		347: [function (require, module, exports) {
 			arguments[4][20][0].apply(exports, arguments)
 		}, {
-			"buffer": 22,
+			"buffer": 51,
 			"dup": 20
 		}],
 		348: [function (require, module, exports) {
@@ -47453,7 +47455,7 @@
 		357: [function (require, module, exports) {
 			arguments[4][20][0].apply(exports, arguments)
 		}, {
-			"buffer": 22,
+			"buffer": 51,
 			"dup": 20
 		}],
 		358: [function (require, module, exports) {
