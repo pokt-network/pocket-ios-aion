@@ -331,12 +331,12 @@ extension PocketAion {
         public static func sendTransaction(wallet: Wallet, nonce: BigInt, to: String, data: String, value: BigInt, nrgPrice: BigInt, nrg: BigInt, handler: @escaping PocketAionStringHandler) throws {
             
             var txParams = [AnyHashable: Any]()
-            txParams["nonce"] = nonce.toString(radix: 16)
+            txParams["nonce"] = HexStringUtil.prependZeroX(hex: nonce.toString(radix: 16))
             txParams["to"] = to
             txParams["data"] = data
-            txParams["value"] = value.toString(radix: 16)
-            txParams["nrgPrice"] = nrgPrice.toString(radix: 16)
-            txParams["nrg"] = nrg.toString(radix: 16)
+            txParams["value"] = HexStringUtil.prependZeroX(hex: value.toString(radix: 16))
+            txParams["nrgPrice"] = HexStringUtil.prependZeroX(hex: nrgPrice.toString(radix: 16))
+            txParams["nrg"] = HexStringUtil.prependZeroX(hex: nrg.toString(radix: 16))
             
             let transaction = try createTransaction(wallet: wallet, params: txParams)
             

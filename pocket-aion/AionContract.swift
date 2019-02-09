@@ -57,7 +57,7 @@ public class AionContract {
         }
     }
     
-    public func executeFunction(functionName: String, wallet: Wallet, functionParams: [String], nonce: BigInt?, nrg: BigInt, nrgPrice: BigInt, value: BigInt, handler: @escaping PocketAionStringHandler) throws{
+    public func executeFunction(functionName: String, wallet: Wallet, functionParams: [Any], nonce: BigInt?, nrg: BigInt, nrgPrice: BigInt, value: BigInt, handler: @escaping PocketAionStringHandler) throws{
         
         guard let function = getFunctionFromArray(name: functionName, functions: functions) else {
             handler(nil, PocketPluginError.Aion.executionError("Invalid function name"))
