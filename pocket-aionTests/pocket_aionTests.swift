@@ -488,6 +488,17 @@ class pocket_aionTests: XCTestCase, Configuration {
         
         waitForExpectations(timeout: 5, handler: nil)
     }
+    
+    func testGetFunctionCallData() {
+        // Create an expectation
+        guard let aionContract = try? getAionContractInstance(abiInterfaceJSON: SmartContract.simple, contractAdress: "0xA0707404B9BE7a5F630fCed3763d28FA5C988964fDC25Aa621161657a7Bf4b89") else {
+            XCTFail("Failed to get aion conract instance")
+            return
+        }
+        let params = [BigInt.init(1)]
+        let functionCallData = try? aionContract?.getFunctionCallData(functionName: "addToState", functionParams: params)
+        XCTAssertNotNil(functionCallData)
+    }
 
     // MARK: Tools
     func getAionContractInstance(abiInterfaceJSON: SmartContract, contractAdress: String) throws -> AionContract?{

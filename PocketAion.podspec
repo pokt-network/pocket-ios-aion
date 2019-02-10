@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
 
   # Meta
   s.name         = "PocketAion"
-  s.version      = "0.0.10"
+  s.version      = "0.0.11"
   s.license      = { :type => 'MIT' }
   s.homepage     = 'https://github.com/pokt-network/pocket-ios-aion'
   s.author       = { "Pabel Nunez L." => "pabel@pokt.network'", 'Luis C. de Leon' => 'luis@pokt.network' }
