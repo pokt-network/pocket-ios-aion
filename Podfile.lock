@@ -1,24 +1,36 @@
 PODS:
+  - BigInt (3.1.0):
+    - SipHash (~> 1.2)
   - Pocket (0.0.3):
     - PocketSwiftKeychainWrapper
     - RNCryptor (~> 5.0)
   - PocketSwiftKeychainWrapper (3.1.0)
   - RNCryptor (5.0.3)
+  - SipHash (1.2.2)
+  - SwiftyJSON (4.2.0)
 
 DEPENDENCIES:
+  - BigInt (~> 3.1)
   - Pocket (~> 0.0.3)
+  - SwiftyJSON (~> 4.0)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
+    - BigInt
     - Pocket
     - PocketSwiftKeychainWrapper
     - RNCryptor
+    - SipHash
+    - SwiftyJSON
 
 SPEC CHECKSUMS:
+  BigInt: 76b5dfdfa3e2e478d4ffdf161aeede5502e2742f
   Pocket: 5e68e3ba188c59a17d239c76e7c0f5e95ecfc258
   PocketSwiftKeychainWrapper: 3194cc7e44290d790ec02e19a801c05e34488249
   RNCryptor: c93d19029dcf7ff160aca0f24d6c9e7b0d82f664
+  SipHash: fad90a4683e420c52ef28063063dbbce248ea6d4
+  SwiftyJSON: c4bcba26dd9ec7a027fc8eade48e2c911f229e96
 
-PODFILE CHECKSUM: c734a933252ebecf1d01e8a369438fec05ea1fdf
+PODFILE CHECKSUM: df8130d9110d1a7290ade1dd81380df034198f8e
 
 COCOAPODS: 1.5.3

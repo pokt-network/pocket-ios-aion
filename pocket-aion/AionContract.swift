@@ -90,6 +90,14 @@ public class AionContract {
         
     }
     
+    public func getFunctionCallData(functionName: String, functionParams: [Any]) throws -> String? {
+        guard let function = getFunctionFromArray(name: functionName, functions: functions) else {
+            throw PocketPluginError.Aion.executionError("Invalid function name")
+        }
+        
+        return try function.encodeFunctionCall(params: functionParams)
+    }
+    
     // MARK: Tools
 
     
