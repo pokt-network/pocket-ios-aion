@@ -50,10 +50,20 @@ public class AionContract {
         
         try PocketAion.eth.call(from: nil, to: contractAddress, nrg: nrg, nrgPrice: nrgPrice, value: value, data: data, blockTag: BlockTag.init(block: .LATEST), subnetwork: subnetwork) { (result, error) in
             if error != nil {
-                handler(nil,error)
-            }else if result != nil {
-                handler(result,nil)
+                handler(nil, error)
+                return
             }
+            
+            if let result = result {
+                guard let decodedValues: [Any] = try? self.decodeCallResponse(encodedResult: result, function: function) else {
+                    handler(nil, PocketPluginError.Aion.executionError("Error decoding call result"))
+                    return
+                }
+                handler(decodedValues, nil)
+                return
+            }
+            
+            handler(nil, PocketPluginError.Aion.executionError("Unknown error"))
         }
     }
     
@@ -100,6 +110,38 @@ public class AionContract {
     
     // MARK: Tools
 
+    private func decodeCallResponse(encodedResult: String, function: Function) throws -> [Any] {
+        var result: [Any]
+        try PocketAion.initJS()
+        
+        // Generate code to run
+        guard let jsFile = try? PocketAion.getFileForResource(name: "decodeFunctionReturn", ext: "js") else {
+            throw PocketPluginError.Aion.bundledFileError("Failed to retrieve encodeFunction.js file")
+        }
+        
+        // Check if is empty and evaluate script with the transaction parameters using string format %@
+        if !jsFile.isEmpty {
+            let jsCode = String(format: jsFile, encodedResult, function.outputsASJSONString())
+            // Evaluate js code
+            PocketAion.jsContext?.evaluateScript(jsCode)
+        }else {
+            throw PocketPluginError.Aion.executionError("Failed to retrieve signed tx js string")
+        }
+        
+        // Retrieve
+        guard let decodedResponse = PocketAion.jsContext?.objectForKeyedSubscript("decodedValue") else {
+            throw PocketPluginError.Aion.executionError("Failed to retrieve decoded response")
+        }
+        
+        if decodedResponse.isArray {
+            result = decodedResponse.toArray()
+        } else {
+            result = []
+            result.append(decodedResponse.toObject())
+        }
+        
+        return result
+    }
     
     private func parseContractFunctions() throws {
 

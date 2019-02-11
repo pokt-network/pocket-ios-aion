@@ -265,7 +265,7 @@ extension PocketAion {
             }
         }
         // eth_call, returns an String with the value of executed contract.
-        public static func call(from: String?, to: String, nrg: BigInt?, nrgPrice: BigInt?, value: BigInt?, data: String?, blockTag: BlockTag, subnetwork: String, handler: @escaping PocketAionStringHandler) throws {
+        public static func call(from: String?, to: String, nrg: BigInt?, nrgPrice: BigInt?, value: BigInt?, data: String?, blockTag: BlockTag, subnetwork: String, handler: @escaping PocketAionCallHandler) throws {
             
             var txParams = [AnyHashable: Any]()
             let blockTagStr = blockTag.getBlockTagString()!
@@ -316,14 +316,14 @@ extension PocketAion {
                     return
                 }
                 
-                guard let txHash = queryResponse?.result?.value() as? String else {
+                guard let callResult = queryResponse?.result?.value() as? String else {
                     let error = PocketPluginError.queryCreationError("Failed to retrieve query response result value")
                     
                     handler(nil, error)
                     return
                 }
                 
-                handler([txHash], nil)
+                handler(callResult, nil)
                 return
             }
         }

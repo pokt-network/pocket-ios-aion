@@ -106,6 +106,19 @@ public struct Function {
         return jsonString
     }
     
+    public func outputsASJSONString() -> String {
+        var result: [JSON] = []
+        self.outputs.forEach { (output) in
+            result.append(output.getJSON())
+        }
+        
+        guard let outputStr = JSON.init(result).rawString(.utf8) else {
+            return "[]"
+        }
+        
+        return outputStr
+    }
+    
     public func encodeFunctionCall(params: [Any]) throws -> String {
         // Convert parameters to string
         
