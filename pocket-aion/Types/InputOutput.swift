@@ -14,14 +14,16 @@ import enum Pocket.PocketPluginError
 public struct InputOutput {
     private var name: String
     private var type: String
+    private var json: JSON
     
     // Constants
     private static let NAME_KEY = "name";
     private static let TYPE_KEY = "type";
     
-    public init(name: String, type: String) {
+    public init(name: String, type: String, json: JSON) {
         self.name = name
         self.type = type
+        self.json = json
     }
     
     public static func fromInputJSONArray(inputArrayJSON: JSON) throws -> [InputOutput] {
@@ -40,8 +42,8 @@ public struct InputOutput {
         
         let inputName = inputObj[NAME_KEY].stringValue
         let inputType = inputObj[TYPE_KEY].stringValue
-
-        return InputOutput(name: inputName, type: inputType);
+        
+        return InputOutput(name: inputName, type: inputType, json: inputObj);
     }
     
     public func getName() -> String {
@@ -52,4 +54,7 @@ public struct InputOutput {
         return self.type;
     }
     
+    public func getJSON() -> JSON {
+        return self.json
+    }
 }

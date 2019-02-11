@@ -452,14 +452,15 @@ class pocket_aionTests: XCTestCase, Configuration {
             // Result should be 2 * 10 = 20
             XCTAssertNil(error)
             XCTAssertNotNil(result)
-            let hexResult = result?.first as? String
-            let hexResultBigInt = BigInt.init(HexStringUtil.removeLeadingZeroX(hex: hexResult ?? "0") ?? "0", radix: 16)
-            XCTAssertEqual(hexResultBigInt, BigInt("20"))
             
+            guard let multiplicationResult = result?.first as? String else {
+                return
+            }
+            XCTAssertEqual(multiplicationResult, "20")
             expectation.fulfill()
         })
         
-        waitForExpectations(timeout: 10, handler: nil)
+        waitForExpectations(timeout: 100000, handler: nil)
     }
     
     func testTypeEncodingAndDecoding() {
@@ -477,7 +478,9 @@ class pocket_aionTests: XCTestCase, Configuration {
         var functionParams = [String]()
         functionParams.append(BigInt.init(10).toString(radix: 16))
         functionParams.append("true")
+        functionParams.append("0xa05b88ac239f20ba0a4d2f0edac8c44293e9b36fa937fb55bf7a1cd61a60f036")
         functionParams.append("Hello World!")
+        functionParams.append("12345678")
         
         try? contract!.executeConstantFunction(functionName: "echo", fromAdress: nil, functionParams: functionParams, nrg: BigInt.init(50000), nrgPrice: BigInt.init(20000000000), value: nil, handler: { (result, error) in
             // Since we know from JSON ABI that the return value is an array, we can decode it
@@ -486,7 +489,7 @@ class pocket_aionTests: XCTestCase, Configuration {
             expectation.fulfill()
         })
         
-        waitForExpectations(timeout: 5, handler: nil)
+        waitForExpectations(timeout: 1000000, handler: nil)
     }
     
     func testGetFunctionCallData() {

@@ -13,6 +13,7 @@ import Pocket
 import JavaScriptCore
 import BigInt
 
+public typealias PocketAionCallHandler = (String?, Error?) -> Void
 public typealias PocketAionStringHandler = ([String]?, Error?) -> Void
 public typealias PocketAionBigIntHandler = (BigInt?, Error?) -> Void
 public typealias PocketAionJSONHandler = ([String: JSON]?, Error?) -> Void
