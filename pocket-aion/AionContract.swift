@@ -5,13 +5,14 @@
 //  Created by Pabel Nunez Landestoy on 1/11/19.
 //  Copyright © 2019 Pocket Network. All rights reserved.
 //
-// AionContract abstracts the complexity of interacting with an smart contract 
+// AionContract abstracts the complexity of interacting with an smart contract
 
 import Foundation
 import SwiftyJSON
 import BigInt
 import enum Pocket.PocketPluginError
 import struct Pocket.Wallet
+import JavaScriptCore
 
 public class AionContract {
     
@@ -109,10 +110,55 @@ public class AionContract {
     }
     
     // MARK: Tools
-
+    
+    private func getCleanJSContext(exceptionHandler: @escaping (JSContext?, JSValue?) -> Void) throws -> JSContext {
+        guard let jsContext = JSContext.init() else {
+            throw PocketPluginError.Aion.executionError("Error creating new JSContext")
+        }
+        
+        // Exception handler
+        jsContext.exceptionHandler = exceptionHandler
+        
+        // Retrieve and evaluate all javascript dependencies
+        let cryptoPolyfillJS = try PocketAion.getFileForResource(name: "crypto-polyfill", ext: "js")
+        let promiseJs = try PocketAion.getFileForResource(name: "promiseDeps", ext: "js")
+        let bigIntJs = try PocketAion.getFileForResource(name: "bigInt-polyfill", ext: "js")
+        let distJS = try PocketAion.getFileForResource(name: "web3Aion", ext: "js")
+        
+        // Create window object
+        jsContext.evaluateScript("var window = this;")
+        
+        // Add crypto polyfill
+        jsContext.evaluateScript(cryptoPolyfillJS)
+        
+        // Add timeout and promises
+        jsContext.evaluateScript(promiseJs)
+        
+        // Add timeout and promises
+        jsContext.evaluateScript(bigIntJs)
+        
+        // Add aion web3
+        jsContext.evaluateScript(distJS)
+        
+        // Create aion instance
+        jsContext.evaluateScript("var aionInstance = new AionWeb3();")
+        
+        return jsContext
+    }
+    
     private func decodeCallResponse(encodedResult: String, function: Function) throws -> [Any] {
         var result: [Any]
-        try PocketAion.initJS()
+        var errorHappened = false
+        //try PocketAion.initJS()
+        guard let jsContext = try? getCleanJSContext(exceptionHandler: { (jsContext, jsValue) in
+            errorHappened = true
+        }) else {
+            throw PocketPluginError.Aion.executionError("Error loading JSContext")
+        }
+        
+        if errorHappened == true {
+            throw PocketPluginError.Aion.executionError("Error loading JSContext")
+        }
         
         // Generate code to run
         guard let jsFile = try? PocketAion.getFileForResource(name: "decodeFunctionReturn", ext: "js") else {
@@ -123,13 +169,13 @@ public class AionContract {
         if !jsFile.isEmpty {
             let jsCode = String(format: jsFile, encodedResult, function.outputsASJSONString())
             // Evaluate js code
-            PocketAion.jsContext?.evaluateScript(jsCode)
+            jsContext.evaluateScript(jsCode)
         }else {
             throw PocketPluginError.Aion.executionError("Failed to retrieve signed tx js string")
         }
         
         // Retrieve
-        guard let decodedResponse = PocketAion.jsContext?.objectForKeyedSubscript("decodedValue") else {
+        guard let decodedResponse = jsContext.objectForKeyedSubscript("decodedValue") else {
             throw PocketPluginError.Aion.executionError("Failed to retrieve decoded response")
         }
         
@@ -144,16 +190,16 @@ public class AionContract {
     }
     
     private func parseContractFunctions() throws {
-
+        
         for abiElement in abiDefinition {
             guard let function = try Function.parseFunctionElement(functionJSON: abiElement) else {
                 return
             }
-        
+            
             functions.append(function)
         }
     }
-
+    
     private func getFunctionFromArray(name: String, functions: [Function]) -> Function?{
         for item in functions {
             if item.getName() == name {
