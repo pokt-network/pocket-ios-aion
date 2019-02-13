@@ -154,7 +154,8 @@ After we meet the params, we can now call the `executeFunction`:
 
 `
 let wallet = "0x0"
-let funcParams = [Any]() // For this smart contract we are sending 1 functParams.append(BigInt.init(1))
+let funcParams = [Any]() 
+functParams.append(BigInt.init(1)) // For this smart contract we are sending 1 
 let nrg = BigInt.init(50000)
 let nrgPrice = BigInt.init(10000000000)
 let nonce = BigInt.init(0)
