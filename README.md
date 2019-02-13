@@ -91,25 +91,25 @@ below:
 
 ```
 
-try? PocketAion.eth.sendTransaction(wallet: account, nonce: BigInt(1), to: "0x0", data: "", value: BigInt(1), gasPrice: BigInt(10000000000), gas: BigInt(21000)) { (result, error) in
+try? PocketAion.eth.sendTransaction(wallet: account, nonce: BigInt(1), to: "0x0", data: "", value: BigInt.init(20000000000), gasPrice: BigInt(10000000000), gas: BigInt(21000)) { (result, error) in
   // Result is the transaction hash
 }
 
 ```
 
 ## Querying Data
-Currently there are 2 supported namespaces in Pocket Node for AION: `net` and `eth` that contains prebuild `RPC_Methods` to call when executing the eth_ namespace.
+Currently there are 2 supported namespaces in PocketAION: `net` and `eth` that contains prebuild `RPC_Methods` to call when executing each namespace.
 In the examples below, you will see how we get the balance of a wallet using both namespaces.
 
 ```
 try? PocketAion.eth.getBalance(address: "0x0...", subnetwork: "32", blockTag: BlockTag.init(block: .LATEST), handler: { (result, error) in
     // result is returned as a BigInt, also can be converted using the .toString() function
-    // error is the error, if any, returned by the Pocket Node
+    // error if any contains a description of the error, returned by the Pocket Node
 })
 ```
 
 ## Interacting with a smart contract
-Before we begin communicating/querying data from a smart contract. We will need to `initialize` an instance of the `AionContract class`, but to do that, we need to specify 4 params:
+Before we begin interacting with a smart contract. We will need to `initialize` an instance of the `AionContract class`, we need to specify 4 params:
 
 1- A PocketAion instance
 
@@ -127,7 +127,7 @@ let pocketAion = PocketAion.init()
 let contractAddress = "0x0..."
 guard let contractABI = JSON.init(parseJSON: "[...]").array else {
     // if there was an error parsing the JSON array
-    throw PocketError.configurationError
+    throw PocketPluginError.Aion.executionError("Failed to retrieve JSON ABI")
     return nil
 }
 // Finally initialize your AionContract
@@ -154,7 +154,7 @@ After we meet the params, we can now call the `executeFunction`:
 
 `
 let wallet = "0x0"
-let funcParams = [BigInt.init(1)]
+let funcParams = [Any]() // For this smart contract we are sending 1 functParams.append(BigInt.init(1))
 let nrg = BigInt.init(50000)
 let nrgPrice = BigInt.init(10000000000)
 let nonce = BigInt.init(0)
@@ -185,15 +185,7 @@ To read a smart contract you will need to use the `executeConstantFunction` call
 6- Value (optional)
 
 ```
-var functionParams = [Any]()
-functionParams.append(BigInt.init(2))
-functionParams.append(BigInt.init(10))
-let fromAddress = "0x0..."
-let nrg = BigInt.init(50000)
-let nrgPrice = BigInt.init(10000000000)
-let value = BigInt.init(0)
-
-try? contract.executeConstantFunction(functionName: "multiply", fromAdress: fromAddress, functionParams: functionParams, nrg: nrg, nrgPrice: nrgPrice, value: value, handler: { (result, error) in
+try? contract.executeConstantFunction(functionName: "multiply", fromAdress: nil, functionParams: [any](), nrg: nil, nrgPrice: nil, value: nil, handler: { (result, error) in
     // Result will be a hex string representing the number 20: 0x14
     // Error, if any, will be the error returned by the Pocket Node
 })
