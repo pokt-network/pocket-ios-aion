@@ -2,10 +2,11 @@
 AION IOS Plugin to connect to any AION compatible Pocket Node.
 For more information about Pocket Node you can checkout the repo [here](https://github.com/pokt-network/pocket-node).
 
+
 # Installation
 Need to install the following pod in your Podfile:
 
-`pod 'PocketAion', '~> 0.0.1'`
+`pod 'PocketAion', '~> 0.0.11'`
 
 # About this plugin
 A Pocket Network plugin will allow your application to send `Transaction` and `Query` objects to any given Pocket Node
@@ -32,6 +33,7 @@ The constructor for any given `PocketAion` instance requires a class implementin
 Let's take a look at the example below:
 
 1- In your `appDelegate` import `Pocket` and `PocketAion`
+
 2- Add `Configuration` protocol to the class:
     `class AppDelegate: UIResponder, UIApplicationDelegate, Configuration, {`
 
@@ -41,174 +43,160 @@ Let's take a look at the example below:
             return URL.init(string: "https://aion.pokt.network")!
         }
     }`
+    
+4- After we specified the URL, we need to set the `configuration` for Pocket in the `Application` function:
+`
+ Pocket.shared.setConfiguration(config: self)
+`
 
 ## Creating and Importing a Wallet
 Follow the following example to create an AION Wallet:
 
-`public static func createWallet(subnetwork: String, data: [AnyHashable : Any]?) throws -> Wallet`
-
 ```
-var wallet = try PocketAion.createWallet(subnetwork: subnetwork, data: nil)
+let wallet = try PocketAion.createWallet(subnetwork: subnetwork, data: nil)
 ```
 
-And to import:
+And to import, you need to define:
 
-`public static func importWallet(subnetwork: String, privateKey: String, address: String?, data: [AnyHashable : Any]?) throws -> Wallet`
+1- Public Key
+
+2- Private Key
+
+3- Subnetwork
+
+4- Data
 
 ```
 let privateKey = "0x";
 let address = "0x";
+let subnetwork = "32";
 
 var importedWallet = try PocketAion.importWallet(privateKey: privateKey, subnetwork: subnetwork, address: address, data: nil)
 ```
 
 ## Sending a transaction
-To send a transaction just use the `sendTransaction` function in the `eth` namespace, like the example
+The requirements to send a transaction which needs to be defined is:
+
+1- Subnetwork: 256 (Main Network), 32 (Mastery Testnet).
+2- Nonce: The wallet transaction count.
+3- Wallet: Either by creating a new Wallet or importing one.
+4- To: The address we wanna send the funds to.
+5- Value: The amount of AION we want to send.
+6- Data(optional): The hex encoded data of the transaction(if sending to a Smart Contract) or raw data being sent to a wallet.
+7- NRG (Energy): The total computational steps we’re willing to execute on this transaction.
+8- NRG Price (Energy Price)
+
+to send a transaction, use the `sendTransaction` function in the `eth` namespace, like the example
 below:
 
 ```
-guard let account = try? PocketAion.createWallet(subnetwork: "32", data: nil) else {
-    XCTFail("Failed to create account")
-    return
-}
 
-try? PocketAion.eth.sendTransaction(wallet: account, nonce: BigInt(1), to: "0xa0f9b0086fdf6c29f67c009e98eb31e1ddf1809a6ef2e44296a377b37ebb9827", data: "", value: BigInt(1), gasPrice: BigInt(10000000000), gas: BigInt(21000)) { (result, error) in
+try? PocketAion.eth.sendTransaction(wallet: account, nonce: BigInt(1), to: "0x0", data: "", value: BigInt(1), gasPrice: BigInt(10000000000), gas: BigInt(21000)) { (result, error) in
   // Result is the transaction hash
 }
 
 ```
 
 ## Querying Data
-Currently there are 2 supported namespaces in Pocket Node for AION: `net` and `eth`.
-In the examples below, you will see how to query the supported RPC calls in both
-namespaces.
+Currently there are 2 supported namespaces in Pocket Node for AION: `net` and `eth` that contains prebuild `RPC_Methods` to call when executing the eth_ namespace.
+In the examples below, you will see how we get the balance of a wallet using both namespaces.
 
 ```
-let network = "mastery"
-var queryParams = ["rpcMethod": "eth_getTransactionCount", "rpcParams": ["0x0", "latest"]]
-
-var query = try PocketAion.createQuery(subnetwork: network, params: queryParams, decoder: nil)
-```
-
-To send your `Query` to the node use the `executeQuery` method:
-
-```
-Pocket.shared.executeQuery(query: query) { (queryResponse, error) in
-  // Check for errors and the response hash
-}
+try? PocketAion.eth.getBalance(address: "0x0...", subnetwork: "32", blockTag: BlockTag.init(block: .LATEST), handler: { (result, error) in
+    // result is returned as a BigInt, also can be converted using the .toString() function
+    // error is the error, if any, returned by the Pocket Node
+})
 ```
 
 ## Interacting with a smart contract
-To interact with an AION smart contract you must use the `AionContract` class.
+Before we begin communicating/querying data from a smart contract. We will need to `initialize` an instance of the `AionContract class`, but to do that, we need to specify 4 params:
 
-### Initializing an AionContract instance
+1- A PocketAion instance
+
+2- The ABI of the Smart Contract
+
+3- Contract Address
+
+4- Subnetwork
+
+### Initializing the AionContract instance
 Here's an example of how to initialize your `AionContract`:
 
 ```
-// Then initialize the JSONArray containing your contract's abiInterface
-let rawJSON = JSON.init("[{\"outputs\":[{\"name\":\"d\",\"type\":\"uint128\"}]," +
-            "\"constant\":true,\"payable\":false,\"inputs\":[{\"name\":\"a\"," +
-        "\"type\":\"uint128\"}],\"name\":\"multiply\",\"type\":\"function\"}]")
-let abiInterface = [rawJSON]
-
-// Finally initialize your AionContract
-guard let aionContract = try? AionContract.init(pocketAion: PocketAion.init(), abiDefinition: abiInterface, contractAddress: "0xa0f9b0086fdf6c29f67c009e98eb31e1ddf1809a6ef2e44296a377b37ebb9827", subnetwork: "32") else {
-  return
+let pocketAion = PocketAion.init()
+let contractAddress = "0x0..."
+guard let contractABI = JSON.init(parseJSON: "[...]").array else {
+    // if there was an error parsing the JSON array
+    throw PocketError.configurationError
+    return nil
 }
+// Finally initialize your AionContract
+let aionContract = try AionContract.init(pocketAion: pocketAion, abiDefinition: contractABI, contractAddress: contractAddress, subnetwork: "32")
 
 ```
 
-### Calling an AionContract function
+### Writing to a Smart Contract
+Before we write to a contract, we need to define:
+
+1- Function name
+
+2- Function parameters
+
+3- Nonce
+
+4- NRG(Energy)
+
+5- NRG Price (Energy Price)
+
+6- Value
+
+After we meet the params, we can now call the `executeFunction`:
+
+`
+let wallet = "0x0"
+let funcParams = [BigInt.init(1)]
+let nrg = BigInt.init(50000)
+let nrgPrice = BigInt.init(10000000000)
+let nonce = BigInt.init(0)
+let value = BigInt.init(0)
+
+try? aionContract.executeFunction(functionName: "addToState", wallet: wallet, functionParams: funcParams, nonce: nonce, nrg: nrg, nrgPrice: nrgPrice, value: value, handler: { (result, error) in
+    // The result will contain the transaction hash
+    // The error, if any, will contain the error sent from the Pocket Node
+})
+`
+
+### Calling(query) an AionContract function
 There are 2 main distinctions when calling a smart contract function: whether or not calling it alters
 the state of the smart contract. This is indicated in the `constant` attribute of the JSON.
 
-To call a constant function, follow the example below:
+To read a smart contract you will need to use the `executeConstantFunction` call with the following parameters, see the example below:
+
+1- Function name
+
+2- Function parameters
+
+3- From address(optional)
+
+4- NRG (Energy, optional)
+
+5- NRG Price (Energy Price, optional)
+
+6- Value (optional)
 
 ```
-// Prepare parameters
 var functionParams = [Any]()
+functionParams.append(BigInt.init(2))
 functionParams.append(BigInt.init(10))
+let fromAddress = "0x0..."
+let nrg = BigInt.init(50000)
+let nrgPrice = BigInt.init(10000000000)
+let value = BigInt.init(0)
 
-// Execute function (null values are optional and the defaults will be used if not provided)
-try? aionContract!.executeConstantFunction(functionName: "multiply", fromAdress: "", functionParams: functionParams, nrg: BigInt.init(), nrgPrice: BigInt.init(), value: BigInt.init(), handler: { (result, error) in
-        // Since we know from JSON ABI that the return value is a uint128 we can check if it's of type String
-        // Result should be input * 7
-        // Since input was 10, result = 70
+try? contract.executeConstantFunction(functionName: "multiply", fromAdress: fromAddress, functionParams: functionParams, nrg: nrg, nrgPrice: nrgPrice, value: value, handler: { (result, error) in
+    // Result will be a hex string representing the number 20: 0x14
+    // Error, if any, will be the error returned by the Pocket Node
 })
-```
-
-Calling a non-constant function is similar to calling a constant function, you just need a `Wallet` to sign the transaction object.
-```
-// Prepare parameters
-var functionParams = [Any]()
-functionParams.append(BigInt.init(10))
-
-// Execute function (null values are optional and the defaults will be used if not provided)
-try? contract?.executeFunction(functionName: "returnValues", wallet: account, functionParams: functionParams, nonce: BigInt.init(), nrg: BigInt.init(), nrgPrice: BigInt.init(), value: BigInt.init(), handler: { (result, error) in
-      // The result is the transaction hash generated.      
-})
-
-```
-
-# Advanced Usage
-In addition to the functions above, you can use the functions below to create and send `Transaction` and `Query` objects to your configured Pocket Node, either synchronously or asynchronously.
-
-## Creating and sending a Transaction
-Follow the example below to create a `Transaction` object for writing to the given AION network with the parameters below and `subnetwork`.
-Throws `CreateTransactionException` in case of errors.
-
-## Creating and sending a Transaction
-Follow the example below to create a `Transaction` object to write to the given AION network with the parameters below and `subnetwork`.
-Throws `transactionCreationError` in case of errors.
-
-```
-// First import the sender's wallet
-let privateKey = "0x";
-let address = "0x";
-
-var importedWallet = try PocketAion.importWallet(privateKey: privateKey, subnetwork: subnetwork, address: address, data: nil)
-
-// Build your transaction parameters
-var txParams = [Anyhashable: Any]()
-
-txParams["nonce"] = "1"
-txParams["to"] = importedWallet?.address ?? ""
-txParams["value"] = "0x989680"
-
-// You can pass in correctly encoded data argument to your transaction in the case of calling a smart contract.
-txParams["data"] = ""
-txParams["gasPrice"] = "0x989680"
-txParams["gas"] = "0x989680"
-
-// Create and sign your Transaction object
-let signedTx = try PocketAion.createTransaction(wallet: importedWallet!, params: txParams)
-```
-
-To send your newly created `Transaction` to the node use the `sendTransaction` method:
-
-```
-PocketAion.shared.sendTransaction(transaction: signedTx) { (transactionResponse, error) in
-  // Check for errors and the response hash
-}
-```
-
-## Creating and sending a Query
-Follow the example below to create a `Transaction` object to write to the given AION network with the parameters below and `subnetwork`.
-Throws `queryCreationError` in case of errors.
-
-```
-let network = "mastery"
-var queryParams = ["rpcMethod": "eth_getTransactionCount", "rpcParams": ["0x0", "latest"]]
-
-var query = try PocketAion.createQuery(subnetwork: network, params: queryParams, decoder: nil)
-```
-
-To send your `Query` to the node use the `executeQuery` method:
-
-```
-Pocket.shared.executeQuery(query: query) { (queryResponse, error) in
-  // Check for errors and the response hash
-}
 ```
 
 # References
