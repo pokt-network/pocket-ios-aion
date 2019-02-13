@@ -78,15 +78,22 @@ var importedWallet = try PocketAion.importWallet(privateKey: privateKey, subnetw
 The requirements to send a transaction which needs to be defined is:
 
 1- Subnetwork: 256 (Main Network), 32 (Mastery Testnet).
+
 2- Nonce: The wallet transaction count.
+
 3- Wallet: Either by creating a new Wallet or importing one.
+
 4- To: The address we wanna send the funds to.
+
 5- Value: The amount of AION we want to send.
+
 6- Data(optional): The hex encoded data of the transaction(if sending to a Smart Contract) or raw data being sent to a wallet.
+
 7- NRG (Energy): The total computational steps we’re willing to execute on this transaction.
+
 8- NRG Price (Energy Price)
 
-to send a transaction, use the `sendTransaction` function in the `eth` namespace, like the example
+To send a transaction, use the `sendTransaction` function in the `eth` namespace, like the example
 below:
 
 ```
