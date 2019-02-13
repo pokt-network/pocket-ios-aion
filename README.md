@@ -152,7 +152,7 @@ Before we write to a contract, we need to define:
 
 After we meet the params, we can now call the `executeFunction`:
 
-`
+```
 let wallet = "0x0"
 let funcParams = [Any]() 
 functParams.append(BigInt.init(1)) // For this smart contract we are sending 1 
@@ -165,7 +165,7 @@ try? aionContract.executeFunction(functionName: "addToState", wallet: wallet, fu
     // The result will contain the transaction hash
     // The error, if any, will contain the error sent from the Pocket Node
 })
-`
+```
 
 ### Calling(query) an AionContract function
 There are 2 main distinctions when calling a smart contract function: whether or not calling it alters
