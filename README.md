@@ -6,7 +6,7 @@ For more information about Pocket Node you can checkout the repo [here](https://
 # Installation
 Need to install the following pod in your Podfile:
 
-`pod 'PocketAion', '~> 0.0.11'`
+`pod 'PocketAion', '~> 0.0.14'`
 
 # About this plugin
 A Pocket Network plugin will allow your application to send `Transaction` and `Query` objects to any given Pocket Node
