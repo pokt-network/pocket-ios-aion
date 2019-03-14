@@ -19,7 +19,7 @@ public class RpcParamsUtil {
         for objParam in params {
             var currStr: String?
             
-            if let objParamArray = objParam as? [Any]{
+            if let objParamArray = objParam as? [Any] {
                 let objStrings = self.objectsAsRpcParams(objParams: objParamArray)
                 guard let result = String.join(char: ",", array: objStrings) else{
                     return nil
@@ -49,26 +49,28 @@ public class RpcParamsUtil {
         return result
     }
     
-    private static func objectAsRpcParam(objParam: Any) -> String?{
-        var currStr = ""
-        
-        if objParam is Bool ||
-            objParam is Double ||
+    private static func objectAsRpcParam(objParam: Any) -> String? {
+        if  objParam is Double ||
             objParam is Float ||
             objParam is Int ||
             objParam is Int64 ||// long
             objParam is UInt8 ||// byte
             objParam is Int16// short
         {
-            guard let strValue = objParam as? String else{
+            guard let strValue = objParam as? String else {
                 return nil
             }
             return strValue
-        }else if objParam is String {
-            currStr = "\"\(objParam)\""
-        }else if objParam is BigInt {
-            currStr = "bigInt(" + "\"" + (objParam as! BigInt).toString(radix: 16) + "\"" + ",16).value"
+        } else if objParam is Bool {
+            guard let boolValue = objParam as? Bool else {
+                return nil
+            }
+            return boolValue.description.lowercased()
+        } else if objParam is String {
+            return "\"\(objParam)\""
+        } else if objParam is BigInt {
+            return "bigInt(" + "\"" + (objParam as! BigInt).toString(radix: 16) + "\"" + ",16).value"
         }
-        return currStr
+        return nil
     }
 }
