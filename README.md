@@ -1,5 +1,5 @@
 # NOTE:
-This repository has been deprecated, please visit the [Pocket Android repository for the latest on Pocket iOS client development.](https://github.com/pokt-network/pocket-swift)
+This repository has been deprecated, please visit the [PocketSwift repository for the latest on Pocket iOS client development.](https://github.com/pokt-network/pocket-swift)
 
 # Pocket IOS AION Plugin
 AION IOS Plugin to connect to any AION compatible Pocket Node.
